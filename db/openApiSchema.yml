@@ -1,0 +1,170 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Seri Padi API
+paths:
+  /users:
+    get:
+      summary: Get all users
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/User"
+  /tables:
+    get:
+      summary: Get all tables
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Table"
+    post:
+      summary: Create a new table
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Table"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Table"
+  /tables/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      summary: Get a table by ID
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Table"
+        "404":
+          description: Table not found
+    put:
+      summary: Update a table by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/Table"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Table"
+        "404":
+          description: Table not found
+    delete:
+      summary: Delete a table by ID
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: table not found
+  /tables/check-availability:
+    post:
+      summary: Check if a table is available for booking
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                requested_start:
+                  type: string
+                  format: date-time
+                requested_end:
+                  type: string
+                  format: date-time
+      responses:
+        "200":
+          description: Table availability status
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  isAvailable:
+                    type: boolean
+        "500":
+          description: Internal server errors
+  /bookings:
+    get:
+      summary: Get all bookings.
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Bookings"
+components:
+  schemas:
+    Table:
+      type: object
+      properties:
+        id_table:
+          type: string
+          readOnly: true
+        table_num:
+          type: string
+        table_pax:
+          type: string
+        table_active:
+          type: string
+    User:
+      type: object
+      properties:
+        id_users:
+          type: string
+          readOnly: true
+        Name:
+          type: string
+        Registered_user_flag:
+          type: string
+    Bookings:
+      type: object
+      properties:
+        id_booking:
+          type: string
+          readOnly: true
+        id_user:
+          type: string
+        id_table:
+          type: string
+        booking_remarks:
+          type: string
+        booking_pax:
+          type: string
+        booking_req:
+          type: string
+        booking_date:
+          type: date-time
