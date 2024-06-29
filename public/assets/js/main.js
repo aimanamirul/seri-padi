@@ -202,7 +202,7 @@
 
   fetchTables().then(tables => {
     console.log(tables);
-    displayTables(tables);
+    // displayTables(tables);
   }).catch(error => {
     console.error('Error fetching and displaying tables:', error);
     //Handle error display if needed

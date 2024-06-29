@@ -1,8 +1,8 @@
 // index.js
 import express from 'express';
-import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import path from 'path';
+import session from 'express-session';
 
 import openapi from './db/openapi.js';
 import tables from './db/tables.js';
@@ -23,6 +23,14 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'index.html'));
 });
+
+// Configure express-session
+app.use(session({
+    secret: process.env.EXPRESS_SECRET,
+    resave: false,
+    saveUninitialized: true,
+    cookie: { secure: false } // Set to true if using HTTPS
+}));
 
 app.use('/openapi', openapi);
 app.use('/tables', tables);

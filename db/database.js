@@ -1,5 +1,6 @@
 import sql from 'mssql';
 import { config } from './config.js';
+import bcrypt from 'bcrypt';
 import generateRandomString from '../util/generateRandomString.js';
 
 const randomString = generateRandomString(20);
@@ -46,7 +47,7 @@ export default class Database {
         return result.rowsAffected[0];
     }
 
-    async create(tableName, data) {
+    async create(tableName, id_var, data) {
         await this.connect();
         const request = this.poolconnection.request();
 
@@ -55,10 +56,10 @@ export default class Database {
         // const columns = Object.keys(data).join(', ');
         // const values = Object.keys(data).map(key => `@${key}`).join(', ');
 
-        const columns = ['ID_TABLE', ...Object.keys(data)].join(', ');
-        const values = [`@ID_TABLE`, ...Object.keys(data).map(key => `@${key}`)].join(', ');
+        const columns = [`${id_var}`, ...Object.keys(data)].join(', ');
+        const values = [`@${id_var}`, ...Object.keys(data).map(key => `@${key}`)].join(', ');
 
-        request.input('ID_TABLE', sql.NVarChar(255), id);
+        request.input(`${id_var}`, sql.NVarChar(255), id);
         Object.entries(data).forEach(([key, value]) => {
             request.input(key, sql.NVarChar(255), value);
         });
@@ -154,5 +155,38 @@ export default class Database {
         `);
 
         return result.recordset[0].conflicting_bookings === 0;
+    }
+
+    // SP_USERS LOGIN
+    async authenticateUser(username, password) {
+        try {
+            await this.connect();
+
+            const request = this.poolconnection.request();
+            request.input('username', sql.NVarChar(255), username);
+
+            const result = await request.query(
+                `SELECT * FROM SP_USERS WHERE username = @username`
+            );
+
+            if (result.recordset.length === 0) {
+                return null; // User not found
+            }
+
+            const user = result.recordset[0];
+            console.log(user);
+            // Compare hashed password
+            const passwordMatch = await bcrypt.compare(password, user.PASSWORD);
+            if (passwordMatch) {
+                // Remove sensitive data before returning user object
+                delete user.PASSWORD;
+                return user;
+            } else {
+                return null; // Incorrect password
+            }
+        } catch (error) {
+            console.error('Error authenticating user:', error);
+            throw error;
+        }
     }
 }

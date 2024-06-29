@@ -29,7 +29,7 @@ router.post('/', async (req, res) => {
     // Create a table
     const data = req.body;
     console.log(`data: ${JSON.stringify(data)}`);
-    const rowsAffected = await database.create(DB_TABLE, data);
+    const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
     res.status(201).json({ rowsAffected });
   } catch (err) {
     res.status(500).json({ error: err?.message });
