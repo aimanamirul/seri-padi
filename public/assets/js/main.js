@@ -6,7 +6,7 @@
 * License: https://bootstrapmade.com/license/
 */
 
-(function() {
+(function () {
   "use strict";
 
   /**
@@ -50,7 +50,7 @@
    * Toggle mobile nav dropdowns
    */
   document.querySelectorAll('.navmenu .toggle-dropdown').forEach(navmenu => {
-    navmenu.addEventListener('click', function(e) {
+    navmenu.addEventListener('click', function (e) {
       e.preventDefault();
       this.parentNode.classList.toggle('active');
       this.parentNode.nextElementSibling.classList.toggle('dropdown-active');
@@ -118,7 +118,7 @@
    * Init swiper sliders
    */
   function initSwiper() {
-    document.querySelectorAll(".init-swiper").forEach(function(swiperElement) {
+    document.querySelectorAll(".init-swiper").forEach(function (swiperElement) {
       let config = JSON.parse(
         swiperElement.querySelector(".swiper-config").innerHTML.trim()
       );
@@ -136,7 +136,7 @@
   /**
    * Correct scrolling position upon page load for URLs containing hash links.
    */
-  window.addEventListener('load', function(e) {
+  window.addEventListener('load', function (e) {
     if (window.location.hash) {
       if (document.querySelector(window.location.hash)) {
         setTimeout(() => {
@@ -172,5 +172,40 @@
   }
   window.addEventListener('load', navmenuScrollspy);
   document.addEventListener('scroll', navmenuScrollspy);
+
+  async function fetchTables() {
+    try {
+      const response = await fetch('/tables'); // Adjust the URL as per your API endpoint
+      if (!response.ok) {
+        throw new Error('Network response was not ok');
+      }
+      const tables = await response.json();
+      return tables;
+    } catch (error) {
+      throw new Error('Error fetching tables:', error);
+    }
+  }
+
+  function displayTables(tables) {
+    const tableListElement = document.getElementById('tableList');
+    tables.forEach(table => {
+      const tableElement = document.createElement('div');
+      tableElement.innerHTML = `
+            <p>ID: ${table.ID_TABLE}</p>
+            <p>Name: ${table.TABLE_NUM}</p>
+            <p>Capacity: ${table.TABLE_PAX}</p>
+            <hr>
+        `;
+      tableListElement.appendChild(tableElement);
+    });
+  }
+
+  fetchTables().then(tables => {
+    console.log(tables);
+    displayTables(tables);
+  }).catch(error => {
+    console.error('Error fetching and displaying tables:', error);
+    //Handle error display if needed
+  });
 
 })();
