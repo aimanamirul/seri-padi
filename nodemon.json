@@ -1,7 +1,10 @@
 {
     "watch": [
         "src",
-        "config"
+        "config",
+        "public",
+        ".",
+        "db"
     ],
     "ext": "js,json,yml,yaml",
     "ignore": [

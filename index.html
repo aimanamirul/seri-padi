@@ -76,6 +76,7 @@
             </ul>
           </li> -->
           <li><a href="#contact">Contact</a></li>
+          <li><a href="/users/bookings_page">My Bookings</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
@@ -985,9 +986,28 @@
 
         <div class="row g-0" data-aos="fade-up" data-aos-delay="100">
 
-          <div class="col-lg-4 reservation-img" style="background-image: url(assets/img/reservation.jpg);"></div>
+          <div class="col-lg-6">
+            <div class="login-container">
+              <h2>Login</h2>
+              <form id="loginForm">
+                <div class="col-lg-6 form-group">
+                  <label class="mb-2" for="username">Username:</label>
+                  <input type="text" id="username" name="username" class="form-control" required>
+                </div>
+                <div class="col-lg-6 form-group">
+                  <label class="mb-2" for="password">Password:</label>
+                  <input type="password" id="password" name="password" class="form-control" required>
+                </div>
+                <div>
+                  <button class="book-a-table-login" type="submit">Login</button>
+                </div>
+              </form>
+              <p id="message"></p>
+            </div>
+            <script src="js/app.js" type="module"></script>
+          </div>
 
-          <div class="col-lg-8 d-flex align-items-center reservation-form-bg" data-aos="fade-up" data-aos-delay="200">
+          <div class="col-lg-6 d-flex align-items-center reservation-form-bg" data-aos="fade-up" data-aos-delay="200">
             <form action="forms/book-a-table.php" method="post" role="form" class="php-email-form">
               <div class="row gy-4">
                 <div class="col-lg-4 col-md-6">
