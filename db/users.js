@@ -179,11 +179,13 @@ router.get('/admin_page', async (req, res) => {
     } else {
       // User is logged in, fetch bookings for the user
       const userId = req.session.user.ID_USER;
-      const bookingsList = await fetchBookingsAll(userId);
+      const bookingsList = await fetchBookingsAll();
+      const usersList = await fetchUsersAll();
+      const msgList = await fetchMsgAll();
       console.log('Bookings:', bookingsList);
 
       // Render the bookings.ejs file with the bookings data
-      res.render('admin_dashboard', { bookingsList });
+      res.render('admin_dashboard', { bookingsList, usersList, msgList });
     }
   } catch (err) {
     console.error('Error fetching bookings:', err);
@@ -205,6 +207,26 @@ async function fetchBookingsAll() {
   try {
     // Query the database for bookings associated with the user
     const result = await database.readAll("SP_BOOKINGS");
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
+async function fetchUsersAll() {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.readAll("SP_USERS");
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
+async function fetchMsgAll() {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.readAll("SP_MESSAGES");
     return result; // Return the fetched bookings data
   } catch (err) {
     throw new Error(`Failed to fetch bookings: ${err.message}`);
