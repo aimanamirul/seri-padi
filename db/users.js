@@ -1,6 +1,7 @@
 import express from 'express';
 import { config } from './config.js';
 import Database from './database.js';
+import Booking from './bookings.js'
 import bcrypt from 'bcrypt';
 import path from 'path';
 
@@ -102,18 +103,77 @@ router.post('/login', async (req, res) => {
   }
 });
 
-router.get('/bookings_page', (req, res) => {
-  if (!req.session.user) {
-    // return res.status(401).json({ error: 'Unauthorized' });
-    const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
-    res.sendFile(htmlPath);
-  } else {
-    // Adjust path to bookings.html relative to your project structure
-    const htmlPath = path.resolve(__dirname, 'public', 'bookings.html');
-    res.sendFile(htmlPath);
+// router.get('/bookings_page', async (req, res) => {
+//   try {
+//     if (!req.session.user) {
+//       // return res.status(401).json({ error: 'Unauthorized' });
+//       const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
+//       res.sendFile(htmlPath);
+//     } else {
+//       // Adjust path to bookings.html relative to your project structure
+
+//       const bookings = await fetchBookingsForUser(req.session.user.ID_USER);
+
+//       // console.log(bookings);
+//       res.render('bookings');
+
+//       // const htmlPath = path.resolve(__dirname, 'public', 'bookings.html');
+//       // res.sendFile(htmlPath);
+//     }
+//   } catch (err) {
+
+//   }
+//   // res.sendFile(path.join(__dirname, 'public', 'bookings.html'));
+// });
+
+router.get('/bookings_page', async (req, res) => {
+  try {
+    if (!req.session.user) {
+      // If user is not logged in, return a page indicating login is required
+      const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
+      return res.sendFile(htmlPath);
+    } else {
+      // User is logged in, fetch bookings for the user
+      const userId = req.session.user.ID_USER;
+      const bookings = await fetchBookingsForUser(userId);
+      console.log('Bookings:', bookings);
+
+      // Render the bookings.ejs file with the bookings data
+      res.render('bookings', { bookings });
+    }
+  } catch (err) {
+    console.error('Error fetching bookings:', err);
+    res.status(500).json({ error: 'Failed to fetch bookings' });
   }
-  // res.sendFile(path.join(__dirname, 'public', 'bookings.html'));
 });
+
+async function fetchBookingsForUser(userId) {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.readMany("SP_BOOKINGS", "ID_USER", userId);
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
+// async function fetchBookingsForUser(userId) {
+//   try {
+//     // Get the table with the specified ID
+//     const tableID = req.params.id;
+//     console.log(`tableId: ${tableID}`);
+//     if (tableID) {
+//       const result = await database.read("SP_BOOKINGS", "ID_USER", userId);
+//       console.log(`tables: ${JSON.stringify(result)}`);
+//       return result;
+//       // res.status(200).json(result);
+//     } else {
+//       res.status(404);
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: err?.message });
+//   }
+// }
 
 router.post('/logout', (req, res) => {
   req.session.destroy(err => {

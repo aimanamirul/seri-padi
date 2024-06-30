@@ -1,12 +1,10 @@
 import express from 'express';
 import { config } from './config.js';
 import Database from './database.js';
+import { sendEmail } from '../util/emailer.js';
 
 const router = express.Router();
 router.use(express.json());
-
-// Development only - don't do in production
-// console.log(config);
 
 // Create database object
 const database = new Database(config);
@@ -24,13 +22,27 @@ router.get('/', async (_, res) => {
   }
 });
 
-router.post('/', async (req, res) => {
+router.post('/create', async (req, res) => {
   try {
     // Create a table
     const data = req.body;
     console.log(`data: ${JSON.stringify(data)}`);
-    const rowsAffected = await database.create(DB_TABLE, data);
-    res.status(201).json({ rowsAffected });
+    const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
+    if (rowsAffected) {
+      res.status(201).json({ rowsAffected });
+
+      const subject = 'Booking Confirmation';
+      const text = `Dear ${data.BOOKING_NAME}, your booking has been confirmed for ${data.BOOKING_DATE_START}.`;
+      const html = `<p>Dear ${data.BOOKING_NAME},</p>
+      <p>Your booking has been confirmed for ${data.BOOKING_DATE_START}.</p>
+      <p>Booking ID: ${data.ID_BOOKING}  </p>`;
+
+      await sendEmail(data.BOOKING_EMAIL, subject, text, html);
+
+    } else {
+      res.status(500).json({ error: 'Failed to create booking.' });
+    }
+
   } catch (err) {
     res.status(500).json({ error: err?.message });
   }

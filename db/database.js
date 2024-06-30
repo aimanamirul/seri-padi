@@ -3,7 +3,7 @@ import { config } from './config.js';
 import bcrypt from 'bcrypt';
 import generateRandomString from '../util/generateRandomString.js';
 
-const randomString = generateRandomString(20);
+const randomString = generateRandomString(8);
 
 export default class Database {
     config = config;
@@ -47,19 +47,52 @@ export default class Database {
         return result.rowsAffected[0];
     }
 
+    // async create(tableName, id_var, data) {
+    //     await this.connect();
+    //     const request = this.poolconnection.request();
+
+    //     const id = data[id_var] ? data[id_var] : generateRandomString(8);
+
+    //     // const columns = Object.keys(data).join(', ');
+    //     // const values = Object.keys(data).map(key => `@${key}`).join(', ');
+
+    //     const columns = [`${id_var}`, ...Object.keys(data)].join(', ');
+    //     const values = [`@${id_var}`, ...Object.keys(data).map(key => `@${key}`)].join(', ');
+
+    //     request.input(`${id_var}`, sql.NVarChar(255), id);
+    //     Object.entries(data).forEach(([key, value]) => {
+    //         request.input(key, sql.NVarChar(255), value);
+    //     });
+
+    //     const result = await request.query(
+    //         `INSERT INTO ${tableName} (${columns}) VALUES (${values})`
+    //     );
+
+    //     return result.rowsAffected[0];
+    // }
+
     async create(tableName, id_var, data) {
         await this.connect();
         const request = this.poolconnection.request();
 
-        const id = generateRandomString(20);
+        // Check if data contains id_var, otherwise generate a new one
+        const id = data[id_var] ? data[id_var] : generateRandomString(8);
 
-        // const columns = Object.keys(data).join(', ');
-        // const values = Object.keys(data).map(key => `@${key}`).join(', ');
+        // Prepare columns and values for the SQL statement
+        const columns = Object.keys(data).includes(id_var)
+            ? Object.keys(data).join(', ')
+            : [`${id_var}`, ...Object.keys(data)].join(', ');
 
-        const columns = [`${id_var}`, ...Object.keys(data)].join(', ');
-        const values = [`@${id_var}`, ...Object.keys(data).map(key => `@${key}`)].join(', ');
+        const values = Object.keys(data).includes(id_var)
+            ? Object.keys(data).map(key => `@${key}`).join(', ')
+            : [`@${id_var}`, ...Object.keys(data).map(key => `@${key}`)].join(', ');
 
-        request.input(`${id_var}`, sql.NVarChar(255), id);
+        // Set the ID in the request if it wasn't included in data
+        if (!data[id_var]) {
+            request.input(`${id_var}`, sql.NVarChar(255), id);
+        }
+
+        // Set other data inputs
         Object.entries(data).forEach(([key, value]) => {
             request.input(key, sql.NVarChar(255), value);
         });
@@ -91,6 +124,20 @@ export default class Database {
             .query(query);
 
         return result.recordset[0];
+    }
+
+    async readMany(tableName, id_var, id) {
+        await this.connect();
+
+        const query = `SELECT * FROM ${tableName} WHERE ${id_var} = '${id}'`;
+        console.log(query);
+
+        const request = this.poolconnection.request();
+        const result = await request
+            // .query(`SELECT * FROM ${tableName} WHERE ${id_var} = '${id}'`);
+            .query(query);
+
+        return result.recordset;
     }
 
     async update(tableName, idVar, id, data) {

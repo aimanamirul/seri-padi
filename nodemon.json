@@ -4,7 +4,8 @@
         "config",
         "public",
         ".",
-        "db"
+        "db",
+        "views"
     ],
     "ext": "js,json,yml,yaml",
     "ignore": [

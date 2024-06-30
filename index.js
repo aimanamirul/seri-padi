@@ -19,6 +19,8 @@ const PORT = process.env.PORT || 3000;
 // Serve static files from the public directory
 app.use(express.static(path.join(__dirname, 'public')));
 
+app.set('view engine', 'ejs');
+
 // Configure express-session
 app.use(session({
     secret: process.env.EXPRESS_SECRET,
@@ -33,7 +35,8 @@ app.use(express.urlencoded({ extended: true }));
 
 // Serve the HTML file
 app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, 'index.html'));
+    // res.sendFile(path.join(__dirname, 'index.html'));
+    res.render('index');
 });
 
 app.use('/openapi', openapi);
