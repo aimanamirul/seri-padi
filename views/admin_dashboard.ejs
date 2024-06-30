@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manage Bookings</title>
+
+  <link href="https://fonts.googleapis.com" rel="preconnect">
+  <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
+
+  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+
+  <!-- Main CSS File -->
+  <link href="assets/css/main.css" rel="stylesheet">
+
+</head>
+
+<body class="index-page">
+  <header id="header" class="header d-flex align-items-center sticky-top">
+    <div class="container position-relative d-flex align-items-center justify-content-between">
+
+      <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
+        <!-- Uncomment the line below if you also wish to use an image logo -->
+        <!-- <img src="assets/img/logo.png" alt=""> -->
+        <h1 class="sitename">Seri Padi De Cabin</h1>
+        <span>.</span>
+      </a>
+
+      <nav id="navmenu" class="navmenu">
+        <ul>
+          <li><a href="/#hero">Home<br></a></li>
+          <li><a href="/#about">About</a></li>
+          <li><a href="/#menu">Menu</a></li>
+          <!-- <li><a href="#events">Events</a></li> -->
+          <!-- <li><a href="#chefs">Chefs</a></li> -->
+          <!-- <li><a href="#gallery">Gallery</a></li> -->
+          <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+            <ul>
+              <li><a href="#">Dropdown 1</a></li>
+              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
+                <ul>
+                  <li><a href="#">Deep Dropdown 1</a></li>
+                  <li><a href="#">Deep Dropdown 2</a></li>
+                  <li><a href="#">Deep Dropdown 3</a></li>
+                  <li><a href="#">Deep Dropdown 4</a></li>
+                  <li><a href="#">Deep Dropdown 5</a></li>
+                </ul>
+              </li>
+              <li><a href="#">Dropdown 2</a></li>
+              <li><a href="#">Dropdown 3</a></li>
+              <li><a href="#">Dropdown 4</a></li>
+            </ul>
+          </li> -->
+          <li><a href="/#contact">Contact</a></li>
+          <li><a href="/users/bookings_page">My Bookings</a></li>
+        </ul>
+        <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
+      </nav>
+
+      <!-- <a class="btn-getstarted" href="index.html#book-a-table">Book a Table</a> -->
+      <button class="book-a-table-login" id="logoutButton">Logout</button>
+
+    </div>
+  </header>
+  <main class="main">
+    <section id="admin" class="section">
+      <div class="container">
+        <div class="row gy-4 mb-4">
+          <div class="col-12 col-lg-12">
+            <h2>Administrator Dashboard</h2>
+            <p>Welcome to the administrator dashboard page!</p>
+          </div>
+        </div>
+        <div class="row gy-4">
+          <div class="col-12 col-lg-2">
+            <ul class="nav flex-column">
+              <li class="nav-item">
+                <a class="nav-link" href="#users">Users</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#bookings">Bookings</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="#messages">Messages</a>
+              </li>
+            </ul>
+          </div>
+
+          <div class="col-12 col-lg-10">
+
+            <!-- Your dashboard content goes here -->
+            <div id="users" class="section-content">
+              <!-- Users section content -->
+              <h3>Users</h3>
+              <p>List of registered users and management options.</p>
+            </div>
+            <div id="bookings" class="section-content">
+              <!-- Bookings section content -->
+              <h3>Bookings</h3>
+              <p>List of restaurant bookings and management options.</p>
+
+              <!-- <ul>
+                <% bookingsList.forEach((booking, i)=> { console.log(booking) %>
+                <li>
+                  <%= i+1 %> - <%= booking.BOOKING_NAME  %>
+                </li>
+                <% }); %>
+              </ul> -->
+
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Booking Name</th>
+                    <th scope="col">Remarks</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Telephone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Pax</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% bookingsList.forEach((booking, index) => { %>
+                  <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= booking.BOOKING_NAME %></td>
+                    <td><%= booking.BOOKING_REMARKS %></td>
+                    <td><%= booking.BOOKING_DATE.toDateString() %></td>
+                    <td><%= booking.BOOKING_TEL %></td>
+                    <td><%= booking.BOOKING_EMAIL %></td>
+                    <td><%= booking.BOOKING_PAX %></td>
+                    <td><%= booking.BOOKING_STATUS %></td>
+                  </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+
+            </div>
+            <div id="messages" class="section-content">
+              <!-- Messages section content -->
+              <h3>Messages</h3>
+              <p>View and manage customer messages.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer id="footer" class="footer">
+
+    <div class="container">
+      <div class="row gy-3">
+        <div class="col-lg-3 col-md-6 d-flex">
+          <i class="bi bi-geo-alt icon"></i>
+          <div class="address">
+            <h4>Address</h4>
+            <p>Lot 1023 Mukim Kandang, Jalan Bukit Lintang, </p>
+            <p>75460 Ayer Molek, Melaka</p>
+            <p></p>
+          </div>
+
+        </div>
+
+        <div class="col-lg-3 col-md-6 d-flex">
+          <i class="bi bi-telephone icon"></i>
+          <div>
+            <h4>Contact</h4>
+            <p>
+              <strong>Phone:</strong> <span>017-324 4866</span><br>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6 d-flex">
+          <i class="bi bi-clock icon"></i>
+          <div>
+            <h4>Opening Hours</h4>
+            <p>
+              <strong>Monday-Sunday:</strong> <span>6PM - 2AM</span><br>
+            </p>
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-6">
+          <h4>Follow Us</h4>
+          <div class="social-links d-flex">
+            <!-- <a href="#" class="twitter"><i class="bi bi-twitter-x"></i></a> -->
+            <!-- <a href="#" class="facebook"><i class="bi bi-facebook"></i></a> -->
+            <a href="https://www.instagram.com/seripadi_decabin/" class="instagram"><i class="bi bi-instagram"></i></a>
+            <a href="#" class="linkedin"><i class="bi bi-whatsapp"></i></a>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="container copyright text-center mt-4">
+      <p>© <span>Copyright</span> <strong class="px-1 sitename">Yummy</strong> <span>All Rights Reserved</span></p>
+      <div class="credits">
+        <!-- All the links in the footer should remain intact. -->
+        <!-- You can delete the links only if you've purchased the pro version. -->
+        <!-- Licensing information: https://bootstrapmade.com/license/ -->
+        <!-- Purchase the pro version with working PHP/AJAX contact form: [buy-url] -->
+        Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+      </div>
+    </div>
+
+  </footer>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all the navigation links
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      // Get all the section contents
+      const sectionContents = document.querySelectorAll('.section-content');
+
+      // Function to show only the selected section and hide others
+      function showSection(sectionId) {
+        sectionContents.forEach(content => {
+          if (content.id === sectionId) {
+            content.style.display = 'block';
+          } else {
+            content.style.display = 'none';
+          }
+        });
+      }
+
+      // Add click event listeners to each navigation link
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          event.preventDefault(); // Prevent default link behavior
+
+          // Get the href attribute to determine which section to show
+          const sectionId = this.getAttribute('href').substring(1); // Remove the #
+
+          // Show the corresponding section
+          showSection(sectionId);
+        });
+      });
+
+      // Initially show the first section (optional)
+      showSection('users');
+    });
+  </script>
+  <script src="js/bookings_page.js"></script>
+</body>
+
+</html>

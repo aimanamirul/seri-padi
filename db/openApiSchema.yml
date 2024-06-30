@@ -202,15 +202,17 @@ components:
         ID_USER:
           type: string
           readOnly: true
-        Name:
+        NAME:
           type: string
-        Registered_user_flag:
+        USERNAME:
           type: string
-        Username:
-          type: string
-        Password:
+        PASSWORD:
           type: string
           format: password
+        EMAIL:
+          type: string
+        TEL_NO:
+          type: string
     Bookings:
       type: object
       properties:
@@ -225,11 +227,6 @@ components:
           type: string
         booking_pax:
           type: string
-        booking_req:
-          type: string
-        booking_date_start:
-          type: string
-          format: date-time
-        booking_date_end:
+        booking_date:
           type: string
           format: date-time

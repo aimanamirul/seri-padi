@@ -26,10 +26,10 @@ router.post('/', async (req, res) => {
     const data = req.body;
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
-    const hashedPassword = await bcrypt.hash(data.Password, salt);
+    const hashedPassword = await bcrypt.hash(data.PASSWORD, salt);
 
-    data.Password = hashedPassword;
-    data.Role = "USER";
+    data.PASSWORD = hashedPassword;
+    data.ROLE = "USER";
 
     const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
     res.status(201).json({ rowsAffected });
@@ -93,7 +93,8 @@ router.post('/login', async (req, res) => {
     const user = await database.authenticateUser(username, password);
     if (user) {
       req.session.user = user;
-      return res.status(200).json({ message: 'Login successful' });
+      console.log(user)
+      return res.status(200).json({ message: 'Login successful', role: user.ROLE });
     } else {
       return res.status(401).json({ error: 'Invalid username or password' });
     }
@@ -147,10 +148,63 @@ router.get('/bookings_page', async (req, res) => {
   }
 });
 
+router.get('/register_page', async (req, res) => {
+  try {
+    // if (!req.session.user) {
+    //   // If user is not logged in, return a page indicating login is required
+    //   return res.sendFile(htmlPath);
+    // } else {
+    //   // User is logged in, fetch bookings for the user
+    //   const userId = req.session.user.ID_USER;
+    //   const bookings = await fetchBookingsForUser(userId);
+    //   console.log('Bookings:', bookings);
+
+    //   // Render the bookings.ejs file with the bookings data
+    //   res.render('bookings', { bookings });
+    // }
+    const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
+    return res.sendFile(htmlPath);
+  } catch (err) {
+    // console.error('Error fetching bookings:', err);
+    // res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
+router.get('/admin_page', async (req, res) => {
+  try {
+    if (!req.session.user) {
+      // If user is not logged in, return a page indicating login is required
+      const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
+      return res.sendFile(htmlPath);
+    } else {
+      // User is logged in, fetch bookings for the user
+      const userId = req.session.user.ID_USER;
+      const bookingsList = await fetchBookingsAll(userId);
+      console.log('Bookings:', bookingsList);
+
+      // Render the bookings.ejs file with the bookings data
+      res.render('admin_dashboard', { bookingsList });
+    }
+  } catch (err) {
+    console.error('Error fetching bookings:', err);
+    res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
 async function fetchBookingsForUser(userId) {
   try {
     // Query the database for bookings associated with the user
     const result = await database.readMany("SP_BOOKINGS", "ID_USER", userId);
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
+async function fetchBookingsAll() {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.readAll("SP_BOOKINGS");
     return result; // Return the fetched bookings data
   } catch (err) {
     throw new Error(`Failed to fetch bookings: ${err.message}`);

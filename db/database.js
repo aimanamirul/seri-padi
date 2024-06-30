@@ -221,7 +221,7 @@ export default class Database {
             }
 
             const user = result.recordset[0];
-            console.log(user);
+            // console.log(user);
             // Compare hashed password
             const passwordMatch = await bcrypt.compare(password, user.PASSWORD);
             if (passwordMatch) {

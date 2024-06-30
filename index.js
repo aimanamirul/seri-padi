@@ -36,7 +36,12 @@ app.use(express.urlencoded({ extended: true }));
 // Serve the HTML file
 app.get('/', (req, res) => {
     // res.sendFile(path.join(__dirname, 'index.html'));
-    res.render('index');
+    if (req.session && req.session.user) {
+        res.render('index', { user: req.session.user });
+    } else {
+        res.render('index', { user: null });
+    }
+    // res.render('index');
 });
 
 app.use('/openapi', openapi);

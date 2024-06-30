@@ -11,3 +11,5 @@ import { fetchTables, displayTables } from '../assets/js/modules/tableFunctions.
         // Handle error display if needed
     // });
 // });
+
+console.log(session);
