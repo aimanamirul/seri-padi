@@ -75,7 +75,7 @@
           </li> -->
           <li><a href="#book-a-table">Book a Table</a></li>
           <li><a href="#contact">Contact</a></li>
-          <li><a href="/users/bookings_page" class="active">My Bookings</a></li>
+          <li><a href="/users/bookings_page">My Bookings</a></li>
           <!-- <li><a href="/users/bookings_page">My Bookings</a></li> -->
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -106,7 +106,8 @@
       <div class="container">
         <div class="row gy-4 justify-content-center justify-content-lg-between">
           <div class="col-lg-5 order-2 order-lg-1 d-flex flex-column justify-content-center">
-            <h1 data-aos="fade-up">Delicious Halal Thai-Style Food<br>Located in Melaka</h1>
+            <h1 data-aos="fade-up">Delicious Halal Thai-Style Food</h1>
+            <h3 class="my-4" data-aos="fade-up"> Located in Malacca</h3>
             <!-- <p data-aos="fade-up" data-aos-delay="100">We are team of talented designers making websites with Bootstrap</p> -->
             <div class="d-flex" data-aos="fade-up" data-aos-delay="200">
               <a href="#book-a-table" class="btn-get-started">Book a Table Now</a>
@@ -1031,9 +1032,9 @@
                 <textarea class="form-control" name="remarks" rows="5" id="remarks" placeholder="Message"></textarea>
               </div>
               <div class="mb-3">
-                <div class="loading">Loading</div>
-                <div class="error-message"></div>
-                <div class="sent-message">Your booking request was sent. We will call back or send an Email to confirm
+                <div id="booking_loading" class="loading">Loading</div>
+                <div id="booking_err" class="error-message"></div>
+                <div id="booking_sent" class="sent-message">Your booking request was sent. We will call back or send an Email to confirm
                   your reservation. Thank you!</div>
               </div>
               <div class="text-center"><button type="submit">Book a Table</button></div>
@@ -1164,30 +1165,29 @@
 
         </div>
 
-        <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="600">
+        <form id="contactForm" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="600">
           <div class="row gy-4">
 
             <div class="col-md-6">
-              <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+              <input type="text" name="name" id="msg_name" class="form-control" placeholder="Your Name" required="">
             </div>
 
             <div class="col-md-6 ">
-              <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
+              <input type="email" class="form-control" id="msg_email" name="email" placeholder="Your Email" required="">
             </div>
 
             <div class="col-md-12">
-              <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
+              <input type="text" class="form-control" id="msg_subject" name="subject" placeholder="Subject" required="">
             </div>
 
             <div class="col-md-12">
-              <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
+              <textarea class="form-control" id="msg_content" name="message" rows="6" placeholder="Message" required=""></textarea>
             </div>
 
             <div class="col-md-12 text-center">
-              <div class="loading">Loading</div>
-              <!-- <div class="error-message"></div> -->
-              <div class="err-message"></div>
-              <div class="sent-message">Your message has been sent. Thank you!</div>
+              <div id="msg_loading" class="loading">Loading</div>
+              <div id="msg_error" class="error-message"></div>
+              <div id="msg_sent" class="sent-message">Your message has been sent. Thank you!</div>
 
               <button type="submit">Send Message</button>
             </div>
@@ -1265,8 +1265,8 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const user = <%- JSON.stringify(user) %>;
-      
-      if(user) {
+
+      if (user) {
         console.log(user);
         const bookForm = document.getElementById('guestBookForm');
 

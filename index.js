@@ -8,6 +8,7 @@ import openapi from './db/openapi.js';
 import tables from './db/tables.js';
 import users from './db/users.js';
 import bookings from './db/bookings.js';
+import messages from './db/messages.js';
 
 const __dirname = path.resolve();
 
@@ -48,6 +49,7 @@ app.use('/openapi', openapi);
 app.use('/tables', tables);
 app.use('/bookings', bookings);
 app.use('/users', users);
+app.use('/messages', messages);
 
 // Start the server
 app.listen(PORT, () => {

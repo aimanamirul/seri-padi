@@ -31,11 +31,25 @@ router.post('/create', async (req, res) => {
     if (rowsAffected) {
       res.status(201).json({ rowsAffected });
 
-      const subject = 'Booking Confirmation';
-      const text = `Dear ${data.BOOKING_NAME}, your booking has been confirmed for ${data.BOOKING_DATE_START}.`;
+      // const subject = 'Booking Confirmation';
+      // const text = `Dear ${data.BOOKING_NAME}, your booking has been confirmed for ${data.BOOKING_DATE_START}.`;
+      // const html = `<p>Dear ${data.BOOKING_NAME},</p>
+      // <p>Your booking has been confirmed for ${data.BOOKING_DATE_START}.</p>
+      // <p>Booking ID: ${data.ID_BOOKING}  </p>`;
+
+      const subject = 'Booking Submitted';
+      const text = `Dear ${data.BOOKING_NAME}, we have received your booking for ${data.BOOKING_DATE}.`;
       const html = `<p>Dear ${data.BOOKING_NAME},</p>
-      <p>Your booking has been confirmed for ${data.BOOKING_DATE_START}.</p>
-      <p>Booking ID: ${data.ID_BOOKING}  </p>`;
+      <p>We have received your for ${data.BOOKING_DATE_START}.</p>
+      <p><strong>Booking Tracking Number:</strong> ${data.ID_BOOKING}  </p>
+      <p><strong>Name</strong> ${data.BOOKING_NAME}  </p>
+      <p><strong>Phone Number:</strong> ${data.BOOKING_TEL}  </p>
+      <p><strong>Persons:</strong> ${data.BOOKING_PAX} pax </p>
+      <p><strong>Remarks:</strong> ${data.BOOKING_REMARKS}  </p>
+
+      <p>A confirmation e-mail will be sent to you upon confirmation of the booking, thank you.</p>
+      <p><strong>Seri Padi De Cabin Management</strong></p>
+      `;
 
       await sendEmail(data.BOOKING_EMAIL, subject, text, html);
 

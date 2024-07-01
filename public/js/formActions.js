@@ -64,12 +64,12 @@ if (document.getElementById('guestBookForm')) {
     const BOOKING_DATE = `${DATE_INPUT}T${TIME_INPUT}:00`;
     console.log('timeinput ' + TIME_INPUT)
     console.log('bookingdate  ' + BOOKING_DATE)
-    
+
     const ID_USER = "GUEST";
     const BOOKING_STATUS = "N";
 
     if (confirm('Confirm Submit Booking?')) {
-      document.querySelector('.loading').classList.add('d-block');
+      document.getElementById('booking_loading').classList.add('d-block');
 
       try {
         const response = await fetch('/bookings/create', {
@@ -83,21 +83,21 @@ if (document.getElementById('guestBookForm')) {
         const result = await response.json();
 
         if (response.ok) {
-          document.querySelector('.loading').classList.remove('d-block');
+          document.getElementById('booking_loading').classList.remove('d-block');
           document.getElementById('guestBookForm').reset(); // Clear the form
-          document.querySelector('.sent-message').style.display = 'block'; // Show success message
-          document.querySelector('.err-message').style.display = 'none'; // Hide error message if any
-          document.querySelector('.sent-message').textContent = `Your booking request was sent. Booking ID: ${ID_BOOKING}. We will call back or send an Email to confirm your reservation. Thank you!`;
+          document.getElementById('booking_err').style.display = 'none'; // Hide error message if any
+          document.getElementById('booking_sent').style.display = 'block'; // Show success message
+          document.getElementById('booking_sent').textContent = `Your booking request was sent. Booking ID: ${ID_BOOKING}. We will call back or send an Email to confirm your reservation. Thank you!`;
         } else {
-          document.querySelector('.loading').classList.remove('d-block');
+          document.getElementById('booking_loading').classList.remove('d-block');
           throw new Error(result.error || 'Failed to submit booking request');
         }
       } catch (error) {
         console.error('Error submitting booking:', error);
-        document.querySelector('.loading').classList.remove('d-block');
-        document.querySelector('.err-message').textContent = 'An error occurred. Please try again.';
-        document.querySelector('.err-message').style.display = 'block'; // Show error message
-        document.querySelector('.sent-message').style.display = 'none'; // Hide success message
+        document.getElementById('booking_loading').classList.remove('d-block');
+        document.getElementById('booking_err').textContent = 'An error occurred. Please try again.';
+        document.getElementById('booking_err').style.display = 'block'; // Show error message
+        document.getElementById('booking_sent').style.display = 'none'; // Hide success message
       }
     }
   });
@@ -182,7 +182,7 @@ if (document.getElementById('profileForm')) {
     const formData = new FormData(document.getElementById('profileForm'));
     const formDataObject = {};
     formData.forEach((value, key) => {
-      if(value) {
+      if (value) {
         formDataObject[key] = value;
       }
     });
@@ -208,6 +208,56 @@ if (document.getElementById('profileForm')) {
     } catch (error) {
       console.error('Error updating role:', error);
       alert('Failed to update role.');
+    }
+  });
+}
+
+if (document.getElementById('contactForm')) {
+
+  document.getElementById('contactForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const ID_MESSAGE = generateRandomId(8);
+
+    const MESSAGE_NAME = document.getElementById('msg_name').value;
+    const MESSAGE_EMAIL = document.getElementById('msg_email').value;
+    // const BOOKING_TEL = document.getElementById('msg_phone').value;
+    const MESSAGE_SUBJECT = document.getElementById('msg_subject').value;
+    const MESSAGE_CONTENT = document.getElementById('msg_content').value;
+
+    if (confirm('Confirm Submit Message?')) {
+      // document.querySelector('.loading').classList.add('d-block');
+      document.getElementById('msg_loading').classList.add('d-block');
+      try {
+        const response = await fetch('/messages/create', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ ID_MESSAGE, MESSAGE_NAME, MESSAGE_EMAIL, MESSAGE_SUBJECT, MESSAGE_CONTENT })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          document.getElementById('msg_loading').classList.remove('d-block');
+          document.getElementById('contactForm').reset(); // Clear the form
+          document.getElementById('msg_sent').style.display = 'block'; // Show success message
+          document.getElementById('msg_error').style.display = 'none'; // Hide error message if any
+          document.getElementById('msg_sent').textContent = `Your message was sent. Thank you!`;
+          // alert('message sent successfully');
+        } else {
+          document.getElementById('msg_loading').classList.remove('d-block');
+          console.log(result.error)
+          throw new Error(result.error || 'Failed to submit booking request');
+        }
+      } catch (error) {
+        console.error('Error submitting message:', error);
+        document.getElementById('msg_loading').classList.remove('d-block');
+        document.getElementById('msg_error').textContent = 'An error occurred. Please try again.';
+        document.getElementById('msg_error').style.display = 'block'; // Show error message
+        document.getElementById('msg_sent').style.display = 'none'; // Hide success message
+      }
     }
   });
 }
