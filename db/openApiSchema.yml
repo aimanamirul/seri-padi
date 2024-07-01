@@ -55,6 +55,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/User"
+  /users/{id}:
+    put:
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+      summary: Update a user by ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/User"
+      responses:
+        "200":
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/User"
+        "404":
+          description: Table not found
   /tables:
     get:
       summary: Get all tables

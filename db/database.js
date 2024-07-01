@@ -143,6 +143,9 @@ export default class Database {
     async update(tableName, idVar, id, data) {
         await this.connect();
 
+        console.log(idVar)
+        console.log(id)
+
         const request = this.poolconnection.request();
         const updateSet = Object.keys(data).map(key => `${key}=@${key}`).join(', ');
 

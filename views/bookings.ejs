@@ -8,9 +8,7 @@
 
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap"
-    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
   <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
   <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
@@ -39,6 +37,7 @@
           <li><a href="/#hero">Home<br></a></li>
           <li><a href="/#about">About</a></li>
           <li><a href="/#menu">Menu</a></li>
+          <li><a href="/#book-a-table">Book a Table</a></li>
           <li><a href="/#contact">Contact</a></li>
           <li><a href="/users/bookings_page" class="active">My Bookings</a></li>
         </ul>
@@ -46,31 +45,145 @@
       </nav>
 
       <!-- <a class="btn-getstarted" href="index.html#book-a-table">Book a Table</a> -->
-      <button class="book-a-table-login" id="logoutButton">Logout</button>
-
+      <div>
+        <span class="mx-4">Welcome, <%= user.NAME %>!</span>
+        <button class="book-a-table-login" id="logoutButton">Logout</button>
+      </div>
     </div>
   </header>
 
   <main class="main">
-    <section id="login" class="section">
+    <section id="bookings" class="section">
       <div class="container">
-        <div class="row gy-4">
-          <h2>Manage Bookings</h2>
-          <p>Welcome to the bookings management page!</p>
-
-          <h4>My Bookings</h4>
-          <ul>
-            <% bookings.forEach((booking, i)=> { console.log(booking) %>
-              <li>
-                <%= i+1 %> - <%= booking.BOOKING_NAME %>
-              </li>
-              <% }); %>
-          </ul>
-
-          <div class="row gy-4">
-            <p>Create A New Booking Here.</p>
+        <div class="row gy-4 mb-4">
+          <div class="col-12 col-lg-12">
+            <h2>Manage Bookings</h2>
+            <p>Welcome to the bookings management page!</p>
           </div>
+        </div>
+        <div class="row gy-4">
+          <div class="col-12 col-lg-2">
+            <nav class="navmenu">
+              <ul class="nav flex-column align-items-start">
+                <li class="nav-item">
+                  <a class="nav-link" href="#booking_list">My Bookings</a>
+                </li>
+                <!-- <li class="nav-item">
+                  <a class="nav-link" href="#booking_new">Create a New Booking</a>
+                </li> -->
+                <li class="nav-item">
+                  <a class="nav-link" href="#my_profile">My Profile</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
+          <div class="col-12 col-lg-10">
+            <div id="booking_list" class="section-content">
+              <h4>My Bookings</h4>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Booking Name</th>
+                    <th scope="col">Remarks</th>
+                    <th scope="col">Date</th>
+                    <th scope="col">Telephone</th>
+                    <th scope="col">Email</th>
+                    <th scope="col">Pax</th>
+                    <th scope="col">Status</th>
+                    <th scope="col">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <% bookingsList.forEach((booking, index) => { %>
+                  <tr>
+                    <td><%= index + 1 %></td>
+                    <td><%= booking.BOOKING_NAME %></td>
+                    <td><%= booking.BOOKING_REMARKS %></td>
+                    <td><%= booking.BOOKING_DATE.toDateString() %></td>
+                    <td><%= booking.BOOKING_TEL %></td>
+                    <td><%= booking.BOOKING_EMAIL %></td>
+                    <td><%= booking.BOOKING_PAX %></td>
+                    <% if(booking.BOOKING_STATUS === "N") {  %>
+                    <td>NEW</td>
+                    <% } else if(booking.BOOKING_STATUS === "X") { %>
+                    <td>CANCELLED</td>
+                    <% } else if(booking.BOOKING_STATUS === "C") { %>
+                    <td>CONFIRMED</td>
+                    <%} else {%>
+                    <td></td>
+                    <% } %>
+                    <td>
+                      <% if(booking.BOOKING_STATUS === "X") { %>
+                      <% } else { %>
+                      <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Cancel</button>
+                      <% } %>
+                    </td>
+                  </tr>
+                  <% }); %>
+                </tbody>
+              </table>
+            </div>
 
+            <div id="booking_new" class="section-content">
+              <h4 class="mb-4">Create A New Booking</h4>
+              <div class="reservation-form-bg">
+                <form class="php-email-form" id="userBookForm">
+                  <div class="row gy-4">
+                    <div class="col-lg-4 col-md-6">
+                      <input type="text" name="name" value="<%= user.NAME %>" class="form-control" id="name" placeholder="Your Name" required="">
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                      <input type="email" class="form-control" value="<%= user.EMAIL %>" name="email" id="email" placeholder="Your Email" required="">
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                      <input type="text" class="form-control" value="<%= user.TEL_NO %>" name="phone" id="phone" placeholder="Your Phone" required="">
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                      <input type="date" name="date" class="form-control" id="date" placeholder="Date" required="">
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                      <input type="time" class="form-control" name="time" id="time" placeholder="Time" required="">
+                    </div>
+                    <div class="col-lg-4 col-md-6">
+                      <input type="number" class="form-control" name="people" id="people" placeholder="# of people" required="">
+                    </div>
+                  </div>
+                  <div class="form-group mt-3">
+                    <textarea class="form-control" name="remarks" rows="5" id="remarks" placeholder="Message"></textarea>
+                  </div>
+                  <div class="mb-3">
+                    <div class="loading">Loading</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message"></div>
+                  </div>
+                  <div class="text-center"><button class="book-a-table-login " type="submit">Book a Table</button></div>
+                </form>
+              </div>
+
+            </div>
+
+            <div id="my_profile" class="section-content">
+              <h4 class="mb-4">View & Update Your Profile</h4>
+              <form id="profileForm" method="POST">
+                <div class="col-lg-8">
+                  <label class="mb-2" for="name">Name</label>
+                  <input class="form-control" type="text" id="name" name="name" value="<%= user.NAME %>" required>
+                </div>
+                <div class="col-lg-8">
+                  <label class="mb-2" for="tel_no">Phone Number</label>
+                  <input class="form-control" type="tel" id="tel_no" name="tel_no" value="<%= user.TEL_NO %>" required>
+                </div>
+                <div class="col-lg-8">
+                  <label class="mb-2" for="email">Email</label>
+                  <input class="form-control" type="email" id="email" name="email" value="<%= user.EMAIL %>" required>
+                </div>
+                <button class="book-a-table-login" type="submit">Save</button>
+                <p id="registerMessage"></p>
+              </form>
+            </div>
+
+          </div>
         </div>
       </div>
     </section>
@@ -136,7 +249,83 @@
     </div>
 
   </footer>
+  <script>
+    const userId = '<%= user.ID_USER %>';
 
+    document.addEventListener('DOMContentLoaded', function() {
+      // Get all the navigation links
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      //initialize values if found to have session
+
+
+      // Get all the section contents
+      const sectionContents = document.querySelectorAll('.section-content');
+
+      // Function to show only the selected section and hide others
+      function showSection(sectionId) {
+        sectionContents.forEach(content => {
+          if (content.id === sectionId) {
+            content.style.display = 'block';
+          } else {
+            content.style.display = 'none';
+          }
+        });
+      }
+
+      // Add click event listeners to each navigation link
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          event.preventDefault(); // Prevent default link behavior
+
+          // Get the href attribute to determine which section to show
+          const sectionId = this.getAttribute('href').substring(1); // Remove the #
+
+          // Show the corresponding section
+          showSection(sectionId);
+        });
+      });
+
+      // Initially show the first section (optional)
+      showSection('booking_list');
+
+      const cancelButtons = document.querySelectorAll('.cancel-booking');
+
+      if (cancelButtons) {
+        cancelButtons.forEach(button => {
+          button.addEventListener('click', async function() {
+            if (confirm('Confirm to cancel this booking?')) {
+              const bookingId = this.getAttribute('data-booking-id');
+
+              try {
+                const response = await fetch(`/bookings/${bookingId}`, {
+                  method: 'PUT', // Use PUT method for updating
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    BOOKING_STATUS: 'X'
+                  }) // Update status to ''
+                });
+
+                if (response.ok) {
+                  alert('Booking canceled successfully!');
+                  window.location.reload(); // Reload the page after cancellation (optional)
+                } else {
+                  alert('Failed to cancel booking.');
+                }
+              } catch (error) {
+                console.error('Error canceling booking:', error);
+                alert('Failed to cancel booking.');
+              }
+            }
+          });
+        });
+      }
+    });
+  </script>
+  <script src="assets/vendor/php-email-form/validate.js"></script>
+  <script src="js/formActions.js" type="module"></script>
   <script src="js/bookings_page.js"></script>
 </body>
 

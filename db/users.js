@@ -53,10 +53,14 @@ router.get('/get/:id', async (req, res) => {
 });
 
 router.put('/:id', async (req, res) => {
+  console.log('connect')
   try {
     const tableId = req.params.id;
     const table = req.body;
-
+    
+    console.log(tableId)
+    console.log(table)
+    
     if (tableId && table) {
       delete table.id;
       const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, table);
@@ -65,6 +69,7 @@ router.put('/:id', async (req, res) => {
       res.status(404).json({ error: 'User ID and data are required' });
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err?.message });
   }
 });
@@ -135,16 +140,42 @@ router.get('/bookings_page', async (req, res) => {
       return res.sendFile(htmlPath);
     } else {
       // User is logged in, fetch bookings for the user
-      const userId = req.session.user.ID_USER;
-      const bookings = await fetchBookingsForUser(userId);
-      console.log('Bookings:', bookings);
+      // const userId = req.session.user.ID_USER;
+      // const bookings = await fetchBookingsForUser(userId);
+      const email = req.session.user.EMAIL;
+      const user = req.session.user
+      console.log(user)
+      const bookingsList = await fetchBookingsForEmail(email);
+      console.log('Bookings:', bookingsList);
 
       // Render the bookings.ejs file with the bookings data
-      res.render('bookings', { bookings });
+      res.render('bookings', { bookingsList, user });
     }
   } catch (err) {
     console.error('Error fetching bookings:', err);
     res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
+router.get('/view_user/:id', async (req, res) => {
+  try {
+    if (!req.session.user) {
+      // If user is not logged in, return a page indicating login is required
+      // const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
+      // return res.sendFile(htmlPath);
+      return res.redirect('/users/bookings_page');
+    } else {
+      const user = req.session.user
+      console.log(user)
+      const viewUserId = req.params.id;
+      const viewUser = await fetchUserById(viewUserId); //change here
+      const bookingsList = await fetchBookingsForEmail(viewUser.EMAIL)
+      // Render the bookings.ejs file with the bookings data
+      res.render('admin_view_user', { bookingsList, viewUser });
+    }
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).json({ error: 'Failed to fetch user' });
   }
 });
 
@@ -207,6 +238,26 @@ async function fetchBookingsAll() {
   try {
     // Query the database for bookings associated with the user
     const result = await database.readAll("SP_BOOKINGS");
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
+async function fetchUserById(id) {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.read(DB_TABLE, DB_TABLE_PK, id);
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
+async function fetchBookingsForEmail(email) {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.readMany("SP_BOOKINGS", "BOOKING_EMAIL", email);
     return result; // Return the fetched bookings data
   } catch (err) {
     throw new Error(`Failed to fetch bookings: ${err.message}`);

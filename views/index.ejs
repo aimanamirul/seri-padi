@@ -75,6 +75,7 @@
           </li> -->
           <li><a href="#book-a-table">Book a Table</a></li>
           <li><a href="#contact">Contact</a></li>
+          <li><a href="/users/bookings_page" class="active">My Bookings</a></li>
           <!-- <li><a href="/users/bookings_page">My Bookings</a></li> -->
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -83,13 +84,13 @@
       <% if (typeof user !=='undefined' && user) { %>
       <!-- Render content for logged-in user -->
       <div>
-        <span class="mx-2">Welcome, <%= user.NAME %>!</span>
-        <button class="book-a-table-login" id="logoutButton">Logout</button>
+        <span class="mx-4">Welcome, <%= user.NAME %>!</span>
+        <button class="btn-getstarted" id="logoutButton">Logout</button>
       </div>
       <% } else { %>
       <!-- Render content for guest users -->
       <div>
-        <span>Welcome, Guest!</span>
+        <span class="mx-4">Welcome, Guest!</span>
         <a class="btn-getstarted" href="#book-a-table">Login</a>
       </div>
       <% } %>
@@ -961,12 +962,14 @@
             <!-- Render content for logged-in user -->
             <div>
               <p class="mb-6">Hi, <%= user.NAME %>!</p>
+              <h5 class="my-4">Summary of Bookings</h5>
 
               <% if (user.ROLE === "ADMIN") { %>
               <a href="/users/admin_page" class="my-2 text-center">View Admin Dashboard</a>
               <% } else { %>
               <a href="/users/bookings_page" class="my-2 text-center">Manage My Bookings</a>
               <% } %>
+
             </div>
             <% } else { %>
             <div class="login-container">
@@ -996,8 +999,12 @@
           <div class="col-lg-6 d-flex align-items-center reservation-form-bg" data-aos="fade-up" data-aos-delay="200">
             <form class="php-email-form" id="guestBookForm">
               <div class="row gy-4">
+
                 <div class="col-lg-12 col-md-12">
+                  <% if (typeof user !=='undefined' && user) { %>
+                  <% } else { %>
                   <p>Book a table as a guest now, and seamlessly link your reservation to your email when you <a href="/users/register_page"> register an account with us. </a></p>
+                  <% }  %>
                 </div>
               </div>
               <div class="row gy-4">
@@ -1254,6 +1261,24 @@
     </div>
 
   </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const user = <%- JSON.stringify(user) %>;
+      
+      if(user) {
+        console.log(user);
+        const bookForm = document.getElementById('guestBookForm');
+
+        bookForm.elements['name'].value = user.NAME;
+        bookForm.elements['email'].value = user.EMAIL;
+        bookForm.elements['phone'].value = user.TEL_NO;
+      } else {
+        console.log('guest mode')
+      }
+
+    });
+  </script>
 
   <!-- Scroll Top -->
   <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

@@ -10,14 +10,14 @@
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&family=Inter:wght@100;200;300;400;500;600;700;800;900&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap" rel="stylesheet">
 
-  <link href="assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="assets/vendor/aos/aos.css" rel="stylesheet">
-  <link href="assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="/assets/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
+  <link href="/assets/vendor/aos/aos.css" rel="stylesheet">
+  <link href="/assets/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
+  <link href="/assets/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
 
   <!-- Main CSS File -->
-  <link href="assets/css/main.css" rel="stylesheet">
+  <link href="/assets/css/main.css" rel="stylesheet">
 
 </head>
 
@@ -74,7 +74,8 @@
         <div class="row gy-4 mb-4">
           <div class="col-12 col-lg-12">
             <h2>Administrator Dashboard</h2>
-            <p>Welcome to the administrator dashboard page!</p>
+            <p>View User</p>
+            <a href="/users/admin_page">Back to Dashboard</a>
           </div>
         </div>
         <div class="row gy-4">
@@ -82,13 +83,7 @@
             <nav class="navmenu">
               <ul class="nav flex-column align-items-start">
                 <li class="nav-item">
-                  <a class="nav-link" href="#users">Users</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#bookings">Bookings</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" href="#messages">Messages</a>
+                  <a class="nav-link" href="#user">User Profile</a>
                 </li>
               </ul>
             </nav>
@@ -97,12 +92,37 @@
           <div class="col-12 col-lg-10">
 
             <!-- Your dashboard content goes here -->
-            <div id="users" class="section-content">
+            <div id="user" class="section-content">
               <!-- Users section content -->
-              <h3>Users</h3>
-              <p>List of registered users and management options.</p>
+              <h4 class="mb-4">Viewing User Profile</h4>
 
-              <table class="table">
+              <div class="row gy-4">
+                <div class="col-12">
+                  <h4>User Profile</h4>
+                  <div class="user-details">
+                    <p><strong>Name:</strong> <%= viewUser.NAME %></p>
+                    <p><strong>Login ID:</strong> <%= viewUser.USERNAME %></p>
+                    <p><strong>Tel. No.:</strong> <%= viewUser.TEL_NO %></p>
+                    <p><strong>Email:</strong> <%= viewUser.EMAIL %></p>
+                    <p><strong>Role:</strong> <%= viewUser.ROLE %></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h4 class="my-4">Update User Role</h4>
+                <form id="updateRoleForm" method="POST" action="/users/<%= viewUser.ID_USER %>">
+                  <div class="mb-3">
+                    <label for="roleSelect" class="form-label">Select Role:</label>
+                    <select class="form-select" id="roleSelect" name="ROLE">
+                      <option value="USER" <%= viewUser.ROLE === 'USER' ? 'selected' : '' %>>USER</option>
+                      <option value="ADMIN" <%= viewUser.ROLE === 'ADMIN' ? 'selected' : '' %>>ADMIN</option>
+                    </select>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update Role</button>
+                </form>
+              </div>
+              <!-- <table class="table">
                 <thead>
                   <tr>
                     <th scope="col">#</th>
@@ -111,88 +131,19 @@
                     <th scope="col">Tel. No.</th>
                     <th scope="col">Email</th>
                     <th scope="col">Role</th>
-                    <th scope="col">Action</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <% usersList.forEach((user, index) => { %>
                   <tr>
-                    <td><%= index + 1 %></td>
-                    <td><%= user.NAME %></td>
-                    <td><%= user.USERNAME %></td>
-                    <td><%= user.TEL_NO %></td>
-                    <td><%= user.EMAIL %></td>
-                    <td><%= user.ROLE %></td>
-                    <td><a href="/users/view_user/<%= user.ID_USER %>">View</a></td>
+                    <td><%= viewUser.NAME %></td>
+                    <td><%= viewUser.USERNAME %></td>
+                    <td><%= viewUser.TEL_NO %></td>
+                    <td><%= viewUser.EMAIL %></td>
+                    <td><%= viewUser.ROLE %></td>
                   </tr>
-                  <% }); %>
                 </tbody>
-              </table>
+              </table> -->
 
-            </div>
-            <div id="bookings" class="section-content">
-              <!-- Bookings section content -->
-              <h3>Bookings</h3>
-              <p>List of restaurant bookings and management options.</p>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Booking Name</th>
-                    <th scope="col">Remarks</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Telephone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Pax</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% bookingsList.forEach((booking, index) => { %>
-                  <tr>
-                    <td><%= index + 1 %></td>
-                    <td><%= booking.BOOKING_NAME %></td>
-                    <td><%= booking.BOOKING_REMARKS %></td>
-                    <td><%= booking.BOOKING_DATE.toDateString() %></td>
-                    <td><%= booking.BOOKING_TEL %></td>
-                    <td><%= booking.BOOKING_EMAIL %></td>
-                    <td><%= booking.BOOKING_PAX %></td>
-                    <td><%= booking.BOOKING_STATUS %></td>
-                  </tr>
-                  <% }); %>
-                </tbody>
-              </table>
-
-            </div>
-            <div id="messages" class="section-content">
-              <!-- Messages section content -->
-              <h3>Messages</h3>
-              <p>View and manage customer messages.</p>
-
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Subject</th>
-                    <th scope="col">Content</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% msgList.forEach((msg, index) => { %>
-                  <tr>
-                    <td><%= index + 1 %></td>
-                    <td><%= msg.NAME %></td>
-                    <td><%= msg.USERNAME %></td>
-                    <td><%= msg.EMAIL %></td>
-                    <td><%= msg.SUBJECT %></td>
-                    <td><%= msg.CONTENT %></td>
-                  </tr>
-                  <% }); %>
-                </tbody>
-              </table>
             </div>
           </div>
         </div>
@@ -294,10 +245,14 @@
       });
 
       // Initially show the first section (optional)
-      showSection('users');
+      showSection('user');
     });
   </script>
-  <script src="js/bookings_page.js"></script>
+  <script src="/js/bookings_page.js"></script>
+  <script>
+    const userId = '<%= viewUser.ID_USER %>';
+  </script>
+  <script src="/js/formActions.js" type="module"></script>
 </body>
 
 </html>

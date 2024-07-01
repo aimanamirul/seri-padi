@@ -65,22 +65,44 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+// router.put('/:id', async (req, res) => {
+//   try {
+//     // Update the table with the specified ID
+//     const tableId = req.params.id;
+//     console.log(`tableId: ${tableId}`);
+//     const table = req.body;
+
+//     if (tableId && table) {
+//       delete table.id;
+//       console.log(`table: ${JSON.stringify(table)}`);
+//       const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, table);
+//       res.status(200).json({ rowsAffected });
+//     } else {
+//       res.status(404);
+//     }
+//   } catch (err) {
+//     res.status(500).json({ error: err?.message });
+//   }
+// });
+
 router.put('/:id', async (req, res) => {
+  console.log('connect')
   try {
-    // Update the table with the specified ID
     const tableId = req.params.id;
-    console.log(`tableId: ${tableId}`);
     const table = req.body;
+
+    console.log(tableId)
+    console.log(table)
 
     if (tableId && table) {
       delete table.id;
-      console.log(`table: ${JSON.stringify(table)}`);
       const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, table);
       res.status(200).json({ rowsAffected });
     } else {
-      res.status(404);
+      res.status(404).json({ error: 'Booking ID and data are required' });
     }
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err?.message });
   }
 });

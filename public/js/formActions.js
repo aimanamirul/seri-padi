@@ -1,7 +1,4 @@
 if (document.getElementById('loginForm')) {
-
-
-
   document.getElementById('loginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -65,8 +62,11 @@ if (document.getElementById('guestBookForm')) {
     const BOOKING_REMARKS = document.getElementById('remarks').value;
 
     const BOOKING_DATE = `${DATE_INPUT}T${TIME_INPUT}:00`;
-
+    console.log('timeinput ' + TIME_INPUT)
+    console.log('bookingdate  ' + BOOKING_DATE)
+    
     const ID_USER = "GUEST";
+    const BOOKING_STATUS = "N";
 
     if (confirm('Confirm Submit Booking?')) {
       document.querySelector('.loading').classList.add('d-block');
@@ -77,7 +77,7 @@ if (document.getElementById('guestBookForm')) {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ ID_BOOKING, BOOKING_NAME, BOOKING_EMAIL, ID_USER, BOOKING_TEL, BOOKING_DATE, BOOKING_PAX, BOOKING_REMARKS })
+          body: JSON.stringify({ ID_BOOKING, BOOKING_NAME, BOOKING_EMAIL, ID_USER, BOOKING_TEL, BOOKING_DATE, BOOKING_PAX, BOOKING_REMARKS, BOOKING_STATUS })
         });
 
         const result = await response.json();
@@ -136,6 +136,78 @@ if (document.getElementById('registerForm')) {
       console.error('Error during registration:', error);
       document.getElementById('registerMessage').textContent = 'An error occurred. Please try again.';
       document.getElementById('registerMessage').style.color = 'red';
+    }
+  });
+}
+
+if (document.getElementById('updateRoleForm')) {
+  document.getElementById('updateRoleForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(document.getElementById('updateRoleForm'));
+    const formDataObject = {};
+    formData.forEach((value, key) => {
+      formDataObject[key] = value;
+    });
+
+    console.log(formDataObject); // Verify formDataObject structure
+
+    try {
+      // const userId = 'your-user-id'; // Replace with actual user ID logic
+      const response = await fetch(`/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataObject)
+      });
+
+      if (response.ok) {
+        alert('Role updated successfully!');
+        window.location.reload(); // Reload the page on success (optional)
+      } else {
+        alert('Failed to update role.');
+      }
+    } catch (error) {
+      console.error('Error updating role:', error);
+      alert('Failed to update role.');
+    }
+  });
+}
+
+if (document.getElementById('profileForm')) {
+  document.getElementById('profileForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const formData = new FormData(document.getElementById('profileForm'));
+    const formDataObject = {};
+    formData.forEach((value, key) => {
+      if(value) {
+        formDataObject[key] = value;
+      }
+    });
+
+    console.log(formDataObject); // Verify formDataObject structure
+
+    try {
+      // const userId = 'your-user-id'; // Replace with actual user ID logic
+      const response = await fetch(`/users/${userId}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(formDataObject)
+      });
+
+      if (response.ok) {
+        alert('Profile updated successfully!');
+        window.location.reload(); // Reload the page on success (optional)
+      } else {
+        alert('Failed to update user profile.');
+      }
+    } catch (error) {
+      console.error('Error updating role:', error);
+      alert('Failed to update role.');
     }
   });
 }
