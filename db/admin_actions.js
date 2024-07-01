@@ -99,43 +99,79 @@ const DB_TABLE_PK = 'ID_BOOKING'
 //   }
 // });
 
+function padZero(num) {
+    return num.toString().padStart(2, '0');
+}
+
 router.put('/:id', async (req, res) => {
-  console.log('connect')
-  try {
-    const bookingId = req.params.id;
-    const bookingData = req.body;
+    console.log('connect')
+    try {
+        const bookingId = req.params.id;
+        const bookingData = req.body;
 
-    console.log(bookingId)
-    console.log(bookingData)
+        console.log(bookingId)
+        console.log(bookingData)
 
-    if (bookingId && bookingData) {
-      delete bookingData.id;
-      const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, bookingId, bookingData);
-      res.status(200).json({ rowsAffected });
-    } else {
-      res.status(404).json({ error: 'Booking ID and data are required' });
+        if (bookingId && bookingData) {
+            delete bookingData.id;
+            const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, bookingId, bookingData);
+
+            const result = await database.read(DB_TABLE, DB_TABLE_PK, bookingId);
+
+            if (!result) {
+                return res.status(404).json({ error: 'Booking not found' });
+            }
+
+            const bookingDate = new Date(result.BOOKING_DATE);
+            const bookingDateISO = bookingDate.toISOString()
+            const dateObj = new Date(bookingDateISO);
+            const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+            const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+            const readableDate = `${formattedDate} ${formattedTime}`;
+
+            const subject = `Table Booking Confirmed - ${result.ID_BOOKING}`;
+            const text = `Dear ${result.BOOKING_NAME}, your booking is now confirmed for ${readableDate}.`;
+            const html = `<p>Dear ${result.BOOKING_NAME},</p>
+      <p>Your booking for ${readableDate} is now confirmed.</p>
+      <p><strong>Booking Tracking Number:</strong> ${result.ID_BOOKING}  </p>
+      <p><strong>Name:</strong> ${result.BOOKING_NAME}  </p>
+      <p><strong>Phone Number:</strong> ${result.BOOKING_TEL}  </p>
+      <p><strong>Persons:</strong> ${result.BOOKING_PAX} pax </p>
+      <p><strong>Remarks:</strong> ${result.BOOKING_REMARKS}  </p>
+
+      <p>Do call us at  017-324 4866 for further inquiries, thank you.</p>
+      <p><strong>Seri Padi De Cabin Management</strong></p>
+      `;
+
+            console.log(html);
+            await sendEmail(result.BOOKING_EMAIL, subject, text, html);
+
+            res.status(200).json({ rowsAffected });
+
+        } else {
+            res.status(404).json({ error: 'Booking ID and data are required' });
+        }
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ error: err?.message });
     }
-  } catch (err) {
-    console.log(err)
-    res.status(500).json({ error: err?.message });
-  }
 });
 
 router.delete('/:id', async (req, res) => {
-  try {
-    // Delete the table with the specified ID
-    const tableId = req.params.id;
-    console.log(`tableId: ${tableId}`);
+    try {
+        // Delete the table with the specified ID
+        const tableId = req.params.id;
+        // console.log(`tableId: ${tableId}`);
 
-    if (!tableId) {
-      res.status(404);
-    } else {
-      const rowsAffected = await database.delete(DB_TABLE, DB_TABLE_PK, tableId);
-      res.status(204).json({ rowsAffected });
+        if (!tableId) {
+            res.status(404);
+        } else {
+            const rowsAffected = await database.delete(DB_TABLE, DB_TABLE_PK, tableId);
+            res.status(204).json({ rowsAffected });
+        }
+    } catch (err) {
+        res.status(500).json({ error: err?.message });
     }
-  } catch (err) {
-    res.status(500).json({ error: err?.message });
-  }
 });
 
 export default router;

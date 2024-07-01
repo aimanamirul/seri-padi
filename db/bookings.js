@@ -13,14 +13,18 @@ const DB_TABLE_PK = 'ID_BOOKING'
 
 router.get('/', async (_, res) => {
   try {
-    // Return a list of users
-    const users = await database.readAll(DB_TABLE);
-    console.log(`users: ${JSON.stringify(users)}`);
-    res.status(200).json(users);
+    // Return a list of bookings
+    const bookings = await database.readAll(DB_TABLE);
+    // console.log(`bookings: ${JSON.stringify(bookings)}`);
+    res.status(200).json(bookings);
   } catch (err) {
     res.status(500).json({ error: err?.message });
   }
 });
+
+function padZero(num) {
+  return num.toString().padStart(2, '0');
+}
 
 router.post('/create', async (req, res) => {
   try {
@@ -29,30 +33,30 @@ router.post('/create', async (req, res) => {
     console.log(`data: ${JSON.stringify(data)}`);
     const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
     if (rowsAffected) {
-      res.status(201).json({ rowsAffected });
 
-      // const subject = 'Booking Confirmation';
-      // const text = `Dear ${data.BOOKING_NAME}, your booking has been confirmed for ${data.BOOKING_DATE_START}.`;
-      // const html = `<p>Dear ${data.BOOKING_NAME},</p>
-      // <p>Your booking has been confirmed for ${data.BOOKING_DATE_START}.</p>
-      // <p>Booking ID: ${data.ID_BOOKING}  </p>`;
+      const dateObj = new Date(data.BOOKING_DATE);
+      const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+      const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+
+      const readableDate = `${formattedDate} ${formattedTime}`;
 
       const subject = 'Booking Submitted';
-      const text = `Dear ${data.BOOKING_NAME}, we have received your booking for ${data.BOOKING_DATE}.`;
+      const text = `Dear ${data.BOOKING_NAME}, we have received your booking for ${readableDate}.`;
       const html = `<p>Dear ${data.BOOKING_NAME},</p>
-      <p>We have received your for ${data.BOOKING_DATE_START}.</p>
+      <p>We have received your for ${readableDate}.</p>
       <p><strong>Booking Tracking Number:</strong> ${data.ID_BOOKING}  </p>
-      <p><strong>Name</strong> ${data.BOOKING_NAME}  </p>
+      <p><strong>Name:</strong> ${data.BOOKING_NAME}  </p>
       <p><strong>Phone Number:</strong> ${data.BOOKING_TEL}  </p>
       <p><strong>Persons:</strong> ${data.BOOKING_PAX} pax </p>
       <p><strong>Remarks:</strong> ${data.BOOKING_REMARKS}  </p>
-
+      
       <p>A confirmation e-mail will be sent to you upon confirmation of the booking, thank you.</p>
       <p><strong>Seri Padi De Cabin Management</strong></p>
       `;
 
       await sendEmail(data.BOOKING_EMAIL, subject, text, html);
 
+      res.status(201).json({ rowsAffected });
     } else {
       res.status(500).json({ error: 'Failed to create booking.' });
     }

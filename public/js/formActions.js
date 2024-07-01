@@ -62,8 +62,6 @@ if (document.getElementById('guestBookForm')) {
     const BOOKING_REMARKS = document.getElementById('remarks').value;
 
     const BOOKING_DATE = `${DATE_INPUT}T${TIME_INPUT}:00`;
-    console.log('timeinput ' + TIME_INPUT)
-    console.log('bookingdate  ' + BOOKING_DATE)
 
     const ID_USER = "GUEST";
     const BOOKING_STATUS = "N";
