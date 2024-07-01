@@ -17,7 +17,7 @@ router.get('/', async (_, res) => {
   try {
     // Return a list of tables
     const tables = await database.readAll(DB_TABLE);
-    console.log(`tables: ${JSON.stringify(tables)}`);
+    // console.log(`tables: ${JSON.stringify(tables)}`);
     res.status(200).json(tables);
   } catch (err) {
     res.status(500).json({ error: err?.message });

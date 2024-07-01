@@ -120,6 +120,35 @@ router.get('/:id', async (req, res) => {
   }
 });
 
+router.get('/fetch_by_email/:email', async (req, res) => {
+  try {
+    // Get the table with the specified ID
+    const tableEmail = req.params.email;
+    console.log(req.params);
+    console.log(`tableEmail: ${ tableEmail}`);
+    if (tableEmail) {
+      // const result = await database.read(DB_TABLE, DB_TABLE_PK, tableID);
+      const result = await fetchBookingsForEmail(tableEmail);
+      console.log(`tables: ${JSON.stringify(result)}`);
+      res.status(200).json(result);
+    } else {
+      res.status(404);
+    }
+  } catch (err) {
+    res.status(500).json({ error: err?.message });
+  }
+});
+
+async function fetchBookingsForEmail(email) {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.readMany(DB_TABLE, "BOOKING_EMAIL", email);
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
 // router.put('/:id', async (req, res) => {
 //   try {
 //     // Update the table with the specified ID

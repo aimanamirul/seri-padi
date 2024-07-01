@@ -45,7 +45,6 @@
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
         <h1 class="sitename">Seri Padi De Cabin</h1>
-        <span>.</span>
       </a>
 
       <nav id="navmenu" class="navmenu">
@@ -53,26 +52,6 @@
           <li><a href="#hero" class="active">Home<br></a></li>
           <li><a href="#about">About</a></li>
           <li><a href="#menu">Menu</a></li>
-          <!-- <li><a href="#events">Events</a></li> -->
-          <!-- <li><a href="#chefs">Chefs</a></li> -->
-          <!-- <li><a href="#gallery">Gallery</a></li> -->
-          <!-- <li class="dropdown"><a href="#"><span>Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-            <ul>
-              <li><a href="#">Dropdown 1</a></li>
-              <li class="dropdown"><a href="#"><span>Deep Dropdown</span> <i class="bi bi-chevron-down toggle-dropdown"></i></a>
-                <ul>
-                  <li><a href="#">Deep Dropdown 1</a></li>
-                  <li><a href="#">Deep Dropdown 2</a></li>
-                  <li><a href="#">Deep Dropdown 3</a></li>
-                  <li><a href="#">Deep Dropdown 4</a></li>
-                  <li><a href="#">Deep Dropdown 5</a></li>
-                </ul>
-              </li>
-              <li><a href="#">Dropdown 2</a></li>
-              <li><a href="#">Dropdown 3</a></li>
-              <li><a href="#">Dropdown 4</a></li>
-            </ul>
-          </li> -->
           <li><a href="#book-a-table">Book a Table</a></li>
           <li><a href="#contact">Contact</a></li>
           <li><a href="/users/bookings_page">My Bookings</a></li>
@@ -84,13 +63,13 @@
       <% if (typeof user !=='undefined' && user) { %>
       <!-- Render content for logged-in user -->
       <div>
-        <span class="mx-4">Welcome, <%= user.NAME %>!</span>
+        <span class="mx-lg-4 mb-4">Welcome, <%= user.NAME %>!</span>
         <button class="btn-getstarted" id="logoutButton">Logout</button>
       </div>
       <% } else { %>
       <!-- Render content for guest users -->
       <div>
-        <span class="mx-4">Welcome, Guest!</span>
+        <span class="mx-lg-4 mb-4">Welcome, Guest!</span>
         <a class="btn-getstarted" href="#book-a-table">Login</a>
       </div>
       <% } %>
@@ -965,6 +944,10 @@
               <p class="mb-6">Hi, <%= user.NAME %>!</p>
               <h5 class="my-4">Summary of Bookings</h5>
 
+              <div class="col-12" id="bookingSummaryList">
+
+              </div>
+
               <% if (user.ROLE === "ADMIN") { %>
               <a href="/users/admin_page" class="my-2 text-center">View Admin Dashboard</a>
               <% } else { %>
@@ -995,14 +978,14 @@
             <% } %>
           </div>
           <div class="col-lg-6 d-flex flex-column align-items-center reservation-form-bg" data-aos="fade-up" data-aos-delay="200">
-            <div class="row gy-4">
-              <nav class="navmenu">
-                <ul class="nav flex-row justify-content-center align-items-center">
+            <div class="row">
+              <nav class="navmenu-mini">
+                <ul class="nav flex-row align-items-start">
                   <li class="nav-item">
-                    <a id="new_booking_nav" class="nav-link-x active" href="#new_booking">New Booking</a>
+                    <a id="new_booking_nav" class="nav-link active p-4" href="#new_booking">New Booking</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link-x" href="#view_booking">View Guest Booking</a>
+                    <a class="nav-link p-4" href="#view_booking">View Guest Booking</a>
                   </li>
                 </ul>
               </nav>
@@ -1011,6 +994,7 @@
               <div class="row gy-4">
                 <div class="col-lg-12 col-md-12">
                   <% if (typeof user !=='undefined' && user) { %>
+                  <p class="mx-4"></p>
                   <% } else { %>
                   <p class="mx-4">Book a table as a guest now, and seamlessly link your reservation to your email when you <a href="/users/register_page"> register an account with us. </a></p>
                   <% }  %>
@@ -1299,7 +1283,7 @@
         console.log('guest mode')
       }
 
-      const navLinks = document.querySelectorAll('.nav-link-x');
+      const navLinks = document.querySelectorAll('.nav-link');
       const sectionContents = document.querySelectorAll('.section-content');
 
       function showSection(sectionId) {
@@ -1331,6 +1315,94 @@
       });
 
       showSection('new_booking');
+
+      function displayBookings(bookings) {
+        const bookingListElement = document.getElementById('bookingSummaryList');
+        if (bookingListElement) {
+          // Create table wrapper
+          const tableWrapper = document.createElement('div');
+          tableWrapper.setAttribute('class', 'table-wrapper');
+
+          // Create table and table header
+          const table = document.createElement('table');
+          table.setAttribute('class', 'booking-table'); // Optional: add a class for styling
+
+          const thead = document.createElement('thead');
+          const headerRow = document.createElement('tr');
+
+          const headers = ['Tracking', 'Name', 'Capacity', 'Status'];
+          headers.forEach(headerText => {
+            const th = document.createElement('th');
+            th.textContent = headerText;
+            headerRow.appendChild(th);
+          });
+
+          thead.appendChild(headerRow);
+          table.appendChild(thead);
+
+          const tbody = document.createElement('tbody');
+
+          bookings.forEach(booking => {
+            const row = document.createElement('tr');
+
+            const dateCell = document.createElement('td');
+            dateCell.textContent = booking.ID_BOOKING;
+            row.appendChild(dateCell);
+
+            const nameCell = document.createElement('td');
+            nameCell.textContent = booking.BOOKING_NAME;
+            row.appendChild(nameCell);
+
+            const capacityCell = document.createElement('td');
+            capacityCell.textContent = booking.BOOKING_PAX;
+            row.appendChild(capacityCell);
+
+            const statusCell = document.createElement('td');
+            statusCell.textContent = booking.BOOKING_STATUS;
+            row.appendChild(statusCell);
+
+            tbody.appendChild(row);
+          });
+
+          table.appendChild(tbody);
+          tableWrapper.appendChild(table); // Append table to the wrapper
+          bookingListElement.appendChild(tableWrapper); // Append wrapper to the booking list element
+        }
+      }
+
+      async function fetchBookings() {
+        try {
+          let response;
+          if (user) {
+            if (user.ROLE === "ADMIN") {
+              response = await fetch('/bookings'); // Adjust the URL as per your API endpoint
+            } else {
+              console.log(user.EMAIL)
+              response = await fetch(`/bookings/fetch_by_email/${user.EMAIL}`);
+            }
+
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+
+            const tables = await response.json();
+            return tables;
+          } else {
+            throw new Error('User is not defined');
+          }
+        } catch (error) {
+          throw new Error('Error fetching tables: ' + error.message);
+        }
+      }
+
+      fetchBookings().then(bookings => {
+        console.log(bookings);
+        // displayTables(tables);
+        displayBookings(bookings);
+      }).catch(error => {
+        console.error('Error fetching and displaying tables:', error);
+        //Handle error display if needed
+      });
     });
   </script>
 
