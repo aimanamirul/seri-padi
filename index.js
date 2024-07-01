@@ -9,6 +9,7 @@ import tables from './db/tables.js';
 import users from './db/users.js';
 import bookings from './db/bookings.js';
 import messages from './db/messages.js';
+import admin_actions from './db/admin_actions.js';
 
 const __dirname = path.resolve();
 
@@ -50,6 +51,7 @@ app.use('/tables', tables);
 app.use('/bookings', bookings);
 app.use('/users', users);
 app.use('/messages', messages);
+app.use('/admin_actions', admin_actions);
 
 // Start the server
 app.listen(PORT, () => {

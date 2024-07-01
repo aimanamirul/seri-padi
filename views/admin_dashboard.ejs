@@ -82,10 +82,10 @@
             <nav class="navmenu">
               <ul class="nav flex-column align-items-start">
                 <li class="nav-item">
-                  <a class="nav-link" href="#users">Users</a>
+                  <a class="nav-link active" href="#bookings">Bookings</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" href="#bookings">Bookings</a>
+                  <a class="nav-link" href="#users">Users</a>
                 </li>
                 <li class="nav-item">
                   <a class="nav-link" href="#messages">Messages</a>
@@ -158,7 +158,26 @@
                     <td><%= booking.BOOKING_TEL %></td>
                     <td><%= booking.BOOKING_EMAIL %></td>
                     <td><%= booking.BOOKING_PAX %></td>
-                    <td><%= booking.BOOKING_STATUS %></td>
+
+                    <!-- <td><%= booking.BOOKING_STATUS %></td> -->
+
+                    <% if(booking.BOOKING_STATUS === "N") {  %>
+                    <td>NEW</td>
+                    <% } else if(booking.BOOKING_STATUS === "X") { %>
+                    <td>CANCELLED</td>
+                    <% } else if(booking.BOOKING_STATUS === "C") { %>
+                    <td>CONFIRMED</td>
+                    <%} else {%>
+                    <td></td>
+                    <% } %>
+
+                    <td>
+                      <% if(booking.BOOKING_STATUS === "N") { %>
+                      <button class="btn btn-primary confirm-booking" data-booking-id="<%= booking.ID_BOOKING %>">Confirm</button>
+                      <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Cancel</button>
+                      <% } else { %>
+                      <% } %>
+                    </td>
                   </tr>
                   <% }); %>
                 </tbody>
@@ -288,13 +307,88 @@
           // Get the href attribute to determine which section to show
           const sectionId = this.getAttribute('href').substring(1); // Remove the #
 
+          navLinks.forEach(navLink => {
+            navLink.classList.remove('active');
+          });
+
+          link.classList.add('active');
+
           // Show the corresponding section
           showSection(sectionId);
         });
       });
 
       // Initially show the first section (optional)
-      showSection('users');
+      showSection('bookings');
+
+      const cancelButtons = document.querySelectorAll('.cancel-booking');
+      const confirmButtons = document.querySelectorAll('.confirm-booking');
+
+      if (cancelButtons) {
+        cancelButtons.forEach(button => {
+          button.addEventListener('click', async function() {
+            if (confirm('Confirm to cancel this booking?')) {
+              const bookingId = this.getAttribute('data-booking-id');
+
+              try {
+                const response = await fetch(`/admin_actions/${bookingId}`, {
+                  method: 'PUT', // Use PUT method for updating
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    BOOKING_STATUS: 'X'
+                  }) // Update status to ''
+                });
+
+                if (response.ok) {
+                  alert('Booking canceled successfully!');
+                  window.location.reload(); // Reload the page after cancellation (optional)
+                  showSection('bookings');
+                } else {
+                  alert('Failed to cancel booking.');
+                }
+              } catch (error) {
+                console.error('Error canceling booking:', error);
+                alert('Failed to cancel booking.');
+              }
+            }
+          });
+        });
+      }
+
+      if (confirmButtons) {
+        confirmButtons.forEach(button => {
+          button.addEventListener('click', async function() {
+            if (confirm('Confirm to confirm this booking?')) {
+              const bookingId = this.getAttribute('data-booking-id');
+
+              try {
+                const response = await fetch(`/admin_actions/${bookingId}`, {
+                  method: 'PUT', // Use PUT method for updating
+                  headers: {
+                    'Content-Type': 'application/json'
+                  },
+                  body: JSON.stringify({
+                    BOOKING_STATUS: 'C'
+                  }) // Update status to ''
+                });
+
+                if (response.ok) {
+                  alert('Booking confirmed successfully!');
+                  window.location.reload(); // Reload the page after cancellation (optional)
+                  showSection('bookings');
+                } else {
+                  alert('Failed to confirm booking.');
+                }
+              } catch (error) {
+                console.error('Error canceling booking:', error);
+                alert('Failed to cancel booking.');
+              }
+            }
+          });
+        });
+      }
     });
   </script>
   <script src="js/bookings_page.js"></script>
