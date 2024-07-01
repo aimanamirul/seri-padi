@@ -62,6 +62,7 @@ if (document.getElementById('guestBookForm')) {
     const BOOKING_REMARKS = document.getElementById('remarks').value;
 
     const BOOKING_DATE = `${DATE_INPUT}T${TIME_INPUT}:00`;
+    const CREATED_DATE = new Date().toISOString;
 
     const ID_USER = "GUEST";
     const BOOKING_STATUS = "N";
@@ -75,7 +76,7 @@ if (document.getElementById('guestBookForm')) {
           headers: {
             'Content-Type': 'application/json'
           },
-          body: JSON.stringify({ ID_BOOKING, BOOKING_NAME, BOOKING_EMAIL, ID_USER, BOOKING_TEL, BOOKING_DATE, BOOKING_PAX, BOOKING_REMARKS, BOOKING_STATUS })
+          body: JSON.stringify({ ID_BOOKING, BOOKING_NAME, BOOKING_EMAIL, ID_USER, BOOKING_TEL, BOOKING_DATE, BOOKING_PAX, BOOKING_REMARKS, BOOKING_STATUS, CREATED_DATE })
         });
 
         const result = await response.json();

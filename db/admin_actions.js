@@ -129,22 +129,37 @@ router.put('/:id', async (req, res) => {
             const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
             const readableDate = `${formattedDate} ${formattedTime}`;
 
-            const subject = `Table Booking Confirmed - ${result.ID_BOOKING}`;
-            const text = `Dear ${result.BOOKING_NAME}, your booking is now confirmed for ${readableDate}.`;
-            const html = `<p>Dear ${result.BOOKING_NAME},</p>
-      <p>Your booking for ${readableDate} is now confirmed.</p>
-      <p><strong>Booking Tracking Number:</strong> ${result.ID_BOOKING}  </p>
-      <p><strong>Name:</strong> ${result.BOOKING_NAME}  </p>
-      <p><strong>Phone Number:</strong> ${result.BOOKING_TEL}  </p>
-      <p><strong>Persons:</strong> ${result.BOOKING_PAX} pax </p>
-      <p><strong>Remarks:</strong> ${result.BOOKING_REMARKS}  </p>
-
-      <p>Do call us at  017-324 4866 for further inquiries, thank you.</p>
-      <p><strong>Seri Padi De Cabin Management</strong></p>
-      `;
-
-            console.log(html);
-            await sendEmail(result.BOOKING_EMAIL, subject, text, html);
+            if (result.BOOKING_STATUS === "C") {
+                const subject = `Table Booking Confirmed - ${result.ID_BOOKING}`;
+                const text = `Dear ${result.BOOKING_NAME}, your booking is now confirmed for ${readableDate}.`;
+                const html = `<p>Dear ${result.BOOKING_NAME},</p>
+          <p>Your booking for ${readableDate} is now confirmed.</p>
+          <p><strong>Booking Tracking Number:</strong> ${result.ID_BOOKING}  </p>
+          <p><strong>Name:</strong> ${result.BOOKING_NAME}  </p>
+          <p><strong>Phone Number:</strong> ${result.BOOKING_TEL}  </p>
+          <p><strong>Persons:</strong> ${result.BOOKING_PAX} pax </p>
+          <p><strong>Remarks:</strong> ${result.BOOKING_REMARKS}  </p>
+    
+          <p>Please call us at  017-324 4866 for further inquiries, thank you.</p>
+          <p><strong>Seri Padi De Cabin Management</strong></p>
+          `;
+                await sendEmail(result.BOOKING_EMAIL, subject, text, html);
+            } else if (result.BOOKING_STATUS === "X") {
+                const subject = `Table Booking Cancelled - ${result.ID_BOOKING}`;
+                const text = `Dear ${result.BOOKING_NAME}, your booking for ${readableDate} was cancelled.`;
+                const html = `<p>Dear ${result.BOOKING_NAME},</p>
+          <p>Unfortunately your booking for ${readableDate} has been cancelled.</p>
+          <p><strong>Booking Tracking Number:</strong> ${result.ID_BOOKING}  </p>
+          <p><strong>Name:</strong> ${result.BOOKING_NAME}  </p>
+          <p><strong>Phone Number:</strong> ${result.BOOKING_TEL}  </p>
+          <p><strong>Persons:</strong> ${result.BOOKING_PAX} pax </p>
+          <p><strong>Remarks:</strong> ${result.BOOKING_REMARKS}  </p>
+    
+          <p>Please call us at  017-324 4866 for further inquiries, thank you.</p>
+          <p><strong>Seri Padi De Cabin Management</strong></p>
+          `;
+                await sendEmail(result.BOOKING_EMAIL, subject, text, html);
+            }
 
             res.status(200).json({ rowsAffected });
 

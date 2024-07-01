@@ -1,10 +1,13 @@
 import express from 'express';
+import dotenv from 'dotenv';
 import { config } from './config.js';
 import Database from './database.js';
 import { sendEmail } from '../util/emailer.js';
 
 const router = express.Router();
 router.use(express.json());
+
+dotenv.config();
 
 // Create database object
 const database = new Database(config);
@@ -20,7 +23,7 @@ router.post('/create', async (req, res) => {
         if (rowsAffected) {
             res.status(201).json({ rowsAffected });
 
-            const email = "aimanamirul2501@gmail.com";
+            const email = process.env.EMAIL_ADDRESS;
 
             const subject = 'Message Received';
             const text = ``;

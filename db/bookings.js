@@ -34,15 +34,52 @@ router.post('/create', async (req, res) => {
     const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
     if (rowsAffected) {
 
-      const dateObj = new Date(data.BOOKING_DATE);
-      const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
-      const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+      emailerAction("bookingSent", data);
 
-      const readableDate = `${formattedDate} ${formattedTime}`;
+      // const dateObj = new Date(data.BOOKING_DATE);
+      // const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+      // const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
 
-      const subject = 'Booking Submitted';
-      const text = `Dear ${data.BOOKING_NAME}, we have received your booking for ${readableDate}.`;
-      const html = `<p>Dear ${data.BOOKING_NAME},</p>
+      // const readableDate = `${formattedDate} ${formattedTime}`;
+
+      // const subject = 'Booking Submitted';
+      // const text = `Dear ${data.BOOKING_NAME}, we have received your booking for ${readableDate}.`;
+      // const html = `<p>Dear ${data.BOOKING_NAME},</p>
+      // <p>We have received your for ${readableDate}.</p>
+      // <p><strong>Booking Tracking Number:</strong> ${data.ID_BOOKING}  </p>
+      // <p><strong>Name:</strong> ${data.BOOKING_NAME}  </p>
+      // <p><strong>Phone Number:</strong> ${data.BOOKING_TEL}  </p>
+      // <p><strong>Persons:</strong> ${data.BOOKING_PAX} pax </p>
+      // <p><strong>Remarks:</strong> ${data.BOOKING_REMARKS}  </p>
+
+      // <p>A confirmation e-mail will be sent to you upon confirmation of the booking, thank you.</p>
+      // <p><strong>Seri Padi De Cabin Management</strong></p>
+      // `;
+
+      // await sendEmail(data.BOOKING_EMAIL, subject, text, html);
+
+      res.status(201).json({ rowsAffected });
+    } else {
+      res.status(500).json({ error: 'Failed to create booking.' });
+    }
+
+  } catch (err) {
+    res.status(500).json({ error: err?.message });
+  }
+});
+
+async function emailerAction(templateType, data) {
+  try {
+    switch (templateType) {
+      case "bookingSent":
+        const dateObj = new Date(data.BOOKING_DATE);
+        const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+        const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+
+        const readableDate = `${formattedDate} ${formattedTime}`;
+        const subject = 'Booking Submitted';
+        const text = `Dear ${data.BOOKING_NAME}, we have received your booking for ${readableDate}.`;
+        const html = `<p>Dear ${data.BOOKING_NAME},</p>
       <p>We have received your for ${readableDate}.</p>
       <p><strong>Booking Tracking Number:</strong> ${data.ID_BOOKING}  </p>
       <p><strong>Name:</strong> ${data.BOOKING_NAME}  </p>
@@ -54,17 +91,17 @@ router.post('/create', async (req, res) => {
       <p><strong>Seri Padi De Cabin Management</strong></p>
       `;
 
-      await sendEmail(data.BOOKING_EMAIL, subject, text, html);
+        await sendEmail(data.BOOKING_EMAIL, subject, text, html);
 
-      res.status(201).json({ rowsAffected });
-    } else {
-      res.status(500).json({ error: 'Failed to create booking.' });
+        break;
+      default:
+        break;
     }
 
-  } catch (err) {
-    res.status(500).json({ error: err?.message });
+  } catch (error) {
+    console.log(error);
   }
-});
+}
 
 router.get('/:id', async (req, res) => {
   try {
