@@ -12,27 +12,37 @@
 --------------------------------------------------------------*/
 /* Fonts */
 :root {
-  --default-font: "Raleway",  system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
-  --heading-font: "Poppins",  sans-serif;
-  --nav-font: "Inter",  sans-serif;
+  --default-font: "Raleway", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Liberation Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+  --heading-font: "Poppins", sans-serif;
+  --nav-font: "Inter", sans-serif;
 }
 
 /* Global Colors - The following color variables are used throughout the website. Updating them here will change the color scheme of the entire website */
-:root { 
-  --background-color: #ffffff; /* Background color for the entire website, including individual sections */
-  --default-color: #212529; /* Default color used for the majority of the text content across the entire website */
-  --heading-color: #37373f; /* Color for headings, subheadings and title throughout the website */
-  --accent-color: #ce1212; /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
-  --contrast-color: #ffffff; /* The contrast color is used for elements when the background color is one of the heading, accent, or default colors. Its purpose is to ensure proper contrast and readability when placed over these more dominant colors */
+:root {
+  --background-color: #ffffff;
+  /* Background color for the entire website, including individual sections */
+  --default-color: #212529;
+  /* Default color used for the majority of the text content across the entire website */
+  --heading-color: #37373f;
+  /* Color for headings, subheadings and title throughout the website */
+  --accent-color: #ce1212;
+  /* Accent color that represents your brand on the website. It's used for buttons, links, and other elements that need to stand out */
+  --contrast-color: #ffffff;
+  /* The contrast color is used for elements when the background color is one of the heading, accent, or default colors. Its purpose is to ensure proper contrast and readability when placed over these more dominant colors */
 }
 
 /* Nav Menu Colors - The following color variables are used specifically for the navigation menu. They are separate from the global colors to allow for more customization options */
 :root {
-  --nav-color: #7f7f90;  /* The default color of the main navmenu links */
-  --nav-hover-color: #ce1212; /* Applied to main navmenu links when they are hovered over or active */
-  --nav-dropdown-background-color: #ffffff; /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
-  --nav-dropdown-color: #7f7f90; /* Used for navigation links of the dropdown items in the navigation menu. */
-  --nav-dropdown-hover-color: #ce1212; /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
+  --nav-color: #7f7f90;
+  /* The default color of the main navmenu links */
+  --nav-hover-color: #ce1212;
+  /* Applied to main navmenu links when they are hovered over or active */
+  --nav-dropdown-background-color: #ffffff;
+  /* Used as the background color for dropdown items that appear when hovering over primary navigation items */
+  --nav-dropdown-color: #7f7f90;
+  /* Used for navigation links of the dropdown items in the navigation menu. */
+  --nav-dropdown-hover-color: #ce1212;
+  /* Similar to --nav-hover-color, this color is applied to dropdown navigation links when they are hovered over. */
 }
 
 /* Template Custom Colors */
@@ -279,6 +289,8 @@ h6 {
     visibility: visible;
   }
 }
+
+
 
 /* Mobile Navigation */
 @media (max-width: 1199px) {
@@ -1711,35 +1723,200 @@ section,
 
 .table-wrapper {
   width: 90%;
-  overflow-x: auto; /* Enable horizontal scrolling */
+  overflow-x: auto;
+  /* Enable horizontal scrolling */
 }
 
 .booking-table {
   width: 100%;
-  border-collapse: collapse; /* Ensure borders don't overlap */
+  border-collapse: collapse;
+  /* Ensure borders don't overlap */
 }
 
-.booking-table th, .booking-table td {
-  padding: 10px; /* Add padding to cells */
-  text-align: left; /* Align text to the left */
+.booking-table th,
+.booking-table td {
+  padding: 10px;
+  /* Add padding to cells */
+  text-align: left;
+  /* Align text to the left */
 }
 
 .booking-table th {
-  background-color: #f2f2f2; /* Add background color to header */
+  background-color: #f2f2f2;
+  /* Add background color to header */
 }
 
 .booking-table tr {
-  border-bottom: 1px solid #ddd; /* Add line between rows */
+  border-bottom: 1px solid #ddd;
+  /* Add line between rows */
 }
 
 .booking-table tr:hover {
-  background-color: #f5f5f5; /* Optional: add hover effect */
+  background-color: #f5f5f5;
+  /* Optional: add hover effect */
 }
 
 /* Media query for responsiveness */
 @media (max-width: 600px) {
-  .booking-table th, .booking-table td {
-    padding: 5px; /* Reduce padding for smaller screens */
-    font-size: 12px; /* Reduce font size for smaller screens */
+
+  .booking-table th,
+  .booking-table td {
+    padding: 5px;
+    /* Reduce padding for smaller screens */
+    font-size: 12px;
+    /* Reduce font size for smaller screens */
+  }
+}
+
+
+@media (min-width: 1200px) {
+  .navmenu-custom {
+    padding: 0;
+  }
+
+  .navmenu-custom ul {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    list-style: none;
+    align-items: center;
+  }
+
+  .navmenu-custom li {
+    position: relative;
+  }
+
+  .navmenu-custom>ul>li {
+    white-space: nowrap;
+    padding: 15px 14px;
+  }
+
+  .navmenu-custom>ul>li:last-child {
+    padding-right: 0;
+  }
+
+  .navmenu-custom a,
+  .navmenu-custom a:focus {
+    color: var(--nav-color);
+    font-size: 15px;
+    padding: 0 2px;
+    font-family: var(--nav-font);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    transition: 0.3s;
+    position: relative;
+  }
+
+  .navmenu-custom a i,
+  .navmenu-custom a:focus i {
+    font-size: 12px;
+    line-height: 0;
+    margin-left: 5px;
+    transition: 0.3s;
+  }
+
+  .navmenu-custom>ul>li>a:before {
+    content: "";
+    position: absolute;
+    height: 2px;
+    bottom: -6px;
+    left: 0;
+    background-color: var(--nav-hover-color);
+    visibility: hidden;
+    width: 0px;
+    transition: all 0.3s ease-in-out 0s;
+  }
+
+  .navmenu-custom a:hover:before,
+  .navmenu-custom li:hover>a:before,
+  .navmenu-custom .active:before {
+    visibility: visible;
+    width: 100%;
+  }
+
+  .navmenu-custom li:hover>a,
+  .navmenu-custom .active,
+  .navmenu-custom .active:focus {
+    color: color-mix(in srgb, var(--nav-color) 80%, black 50%);
+  }
+
+  .navmenu-custom .dropdown ul {
+    margin: 0;
+    padding: 10px 0;
+    background: var(--nav-dropdown-background-color);
+    display: block;
+    position: absolute;
+    visibility: hidden;
+    left: 14px;
+    top: 130%;
+    opacity: 0;
+    transition: 0.3s;
+    border-radius: 4px;
+    z-index: 99;
+    box-shadow: 0px 0px 30px color-mix(in srgb, var(--default-color), transparent 85%);
+  }
+
+  .navmenu-custom .dropdown ul li {
+    min-width: 200px;
+  }
+
+  .navmenu-custom .dropdown ul a {
+    padding: 10px 20px;
+    font-size: 15px;
+    text-transform: none;
+    color: var(--nav-dropdown-color);
+  }
+
+  .navmenu-custom .dropdown ul a i {
+    font-size: 12px;
+  }
+
+  .navmenu-custom .dropdown ul a:hover,
+  .navmenu-custom .dropdown ul .active:hover,
+  .navmenu-custom .dropdown ul li:hover>a {
+    color: var(--nav-dropdown-hover-color);
+  }
+
+  .navmenu-custom .dropdown:hover>ul {
+    opacity: 1;
+    top: 100%;
+    visibility: visible;
+  }
+
+  .navmenu-custom .dropdown .dropdown ul {
+    top: 0;
+    left: -90%;
+    visibility: hidden;
+  }
+
+  .navmenu-custom .dropdown .dropdown:hover>ul {
+    opacity: 1;
+    top: 0;
+    left: -100%;
+    visibility: visible;
+  }
+
+  .custom-nav-link {
+    color: var(--nav-color);
+    font-size: 15px;
+    font-family: var(--nav-font);
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    white-space: nowrap;
+    transition: 0.3s;
+    position: relative;
+  }
+  
+  .custom-nav-link:hover {
+    color: color-mix(in srgb, var(--nav-color) 80%, black 50%);
+  }
+  
+  .custom-nav-link .active {
+    color: var(--nav-dropdown-hover-color);
   }
 }

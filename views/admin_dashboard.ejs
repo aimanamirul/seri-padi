@@ -101,117 +101,119 @@
               <!-- Users section content -->
               <h3>Users</h3>
               <p>List of registered users and management options.</p>
-
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Login ID</th>
-                    <th scope="col">Tel. No.</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Role</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% usersList.forEach((user, index) => { %>
-                  <tr>
-                    <td><%= index + 1 %></td>
-                    <td><%= user.NAME %></td>
-                    <td><%= user.USERNAME %></td>
-                    <td><%= user.TEL_NO %></td>
-                    <td><%= user.EMAIL %></td>
-                    <td><%= user.ROLE %></td>
-                    <td><a href="/users/view_user/<%= user.ID_USER %>">View</a></td>
-                  </tr>
-                  <% }); %>
-                </tbody>
-              </table>
-
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Login ID</th>
+                      <th scope="col">Tel. No.</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Role</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% usersList.forEach((user, index) => { %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= user.NAME %></td>
+                      <td><%= user.USERNAME %></td>
+                      <td><%= user.TEL_NO %></td>
+                      <td><%= user.EMAIL %></td>
+                      <td><%= user.ROLE %></td>
+                      <td><a href="/users/view_user/<%= user.ID_USER %>">View</a></td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div id="bookings" class="section-content">
               <!-- Bookings section content -->
               <h3>Bookings</h3>
               <p>List of restaurant bookings and management options.</p>
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Booking Name</th>
-                    <th scope="col">Remarks</th>
-                    <th scope="col">Date</th>
-                    <th scope="col">Telephone</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Pax</th>
-                    <th scope="col">Status</th>
-                    <th scope="col">Action</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% bookingsList.forEach((booking, index) => { %>
-                  <tr>
-                    <td><%= index + 1 %></td>
-                    <td><%= booking.BOOKING_NAME %></td>
-                    <td><%= booking.BOOKING_REMARKS %></td>
-                    <td><%= booking.BOOKING_DATE.toDateString() %></td>
-                    <td><%= booking.BOOKING_TEL %></td>
-                    <td><%= booking.BOOKING_EMAIL %></td>
-                    <td><%= booking.BOOKING_PAX %></td>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Booking Name</th>
+                      <th scope="col">Remarks</th>
+                      <th scope="col">Date</th>
+                      <th scope="col">Telephone</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Pax</th>
+                      <th scope="col">Status</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% bookingsList.forEach((booking, index) => { %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= booking.BOOKING_NAME %></td>
+                      <td><%= booking.BOOKING_REMARKS %></td>
+                      <td><%= booking.BOOKING_DATE.toDateString() %></td>
+                      <td><%= booking.BOOKING_TEL %></td>
+                      <td><%= booking.BOOKING_EMAIL %></td>
+                      <td><%= booking.BOOKING_PAX %></td>
 
-                    <!-- <td><%= booking.BOOKING_STATUS %></td> -->
+                      <!-- <td><%= booking.BOOKING_STATUS %></td> -->
 
-                    <% if(booking.BOOKING_STATUS === "N") {  %>
-                    <td>NEW</td>
-                    <% } else if(booking.BOOKING_STATUS === "X") { %>
-                    <td>CANCELLED</td>
-                    <% } else if(booking.BOOKING_STATUS === "C") { %>
-                    <td>CONFIRMED</td>
-                    <%} else {%>
-                    <td></td>
-                    <% } %>
-
-                    <td>
-                      <% if(booking.BOOKING_STATUS === "N") { %>
-                      <button class="btn btn-primary confirm-booking" data-booking-id="<%= booking.ID_BOOKING %>">Confirm</button>
-                      <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Cancel</button>
-                      <% } else { %>
+                      <% if(booking.BOOKING_STATUS === "N") {  %>
+                      <td>NEW</td>
+                      <% } else if(booking.BOOKING_STATUS === "X") { %>
+                      <td>CANCELLED</td>
+                      <% } else if(booking.BOOKING_STATUS === "C") { %>
+                      <td>CONFIRMED</td>
+                      <%} else {%>
+                      <td></td>
                       <% } %>
-                    </td>
-                  </tr>
-                  <% }); %>
-                </tbody>
-              </table>
 
+                      <td>
+                        <% if(booking.BOOKING_STATUS === "N") { %>
+                        <button class="btn btn-primary confirm-booking" data-booking-id="<%= booking.ID_BOOKING %>">Confirm</button>
+                        <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Cancel</button>
+                        <% } else { %>
+                        <% } %>
+                      </td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
             </div>
             <div id="messages" class="section-content">
               <!-- Messages section content -->
               <h3>Messages</h3>
               <p>View and manage customer messages.</p>
 
-              <table class="table">
-                <thead>
-                  <tr>
-                    <th scope="col">#</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">Subject</th>
-                    <th scope="col">Content</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <% msgList.forEach((msg, index) => { %>
-                  <tr>
-                    <td><%= index + 1 %></td>
-                    <td><%= msg.NAME %></td>
-                    <td><%= msg.USERNAME %></td>
-                    <td><%= msg.EMAIL %></td>
-                    <td><%= msg.SUBJECT %></td>
-                    <td><%= msg.CONTENT %></td>
-                  </tr>
-                  <% }); %>
-                </tbody>
-              </table>
+              <div class="table-responsive">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Name</th>
+                      <th scope="col">Email</th>
+                      <th scope="col">Subject</th>
+                      <th scope="col">Content</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <% msgList.forEach((msg, index) => { %>
+                    <tr>
+                      <td><%= index + 1 %></td>
+                      <td><%= msg.NAME %></td>
+                      <td><%= msg.EMAIL %></td>
+                      <td><%= msg.SUBJECT %></td>
+                      <td><%= msg.CONTENT %></td>
+                    </tr>
+                    <% }); %>
+                  </tbody>
+                </table>
+              </div>
             </div>
           </div>
         </div>

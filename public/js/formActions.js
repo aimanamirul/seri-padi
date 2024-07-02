@@ -1,7 +1,7 @@
 if (document.getElementById('loginForm')) {
   document.getElementById('loginForm').addEventListener('submit', async (event) => {
     event.preventDefault();
-
+    document.getElementById('login-spinner').style.display = 'inline-block';
     const username = document.getElementById('username').value;
     const password = document.getElementById('password').value;
 
@@ -17,6 +17,8 @@ if (document.getElementById('loginForm')) {
       const result = await response.json();
       console.log(result.user);
       if (response.ok) {
+        document.getElementById('login-spinner').style.display = 'none';
+
         document.getElementById('message').textContent = 'Login successful!';
         document.getElementById('message').style.color = 'green';
         if (result.role === 'ADMIN') {

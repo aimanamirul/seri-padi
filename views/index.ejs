@@ -264,13 +264,13 @@
 
           <li class="nav-item">
             <a class="nav-link active show" data-bs-toggle="tab" data-bs-target="#menu-starters">
-              <h4>Dinner</h4>
+              <h4>Special Featured</h4>
             </a>
           </li><!-- End tab nav item -->
           <li class="nav-item">
-            <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-desserts">
+            <!-- <a class="nav-link" data-bs-toggle="tab" data-bs-target="#menu-desserts">
               <h4>Desserts</h4>
-            </a>
+            </a> -->
           </li><!-- End tab nav item -->
 
           <!-- <li class="nav-item">
@@ -368,6 +368,27 @@
                 <!-- <p class="price"> -->
                 <!-- $9.95 -->
                 <!-- </p> -->
+              </div><!-- Menu Item -->
+              
+              <div class="col-lg-4 menu-item">
+                <a href="assets/img/menu/menu-item-7.jpeg" class="glightbox"><img src="assets/img/menu/menu-item-6.jpeg" class="menu-img img-fluid" alt=""></a>
+                <h4>Kuey Tiow Celup</h4>
+                <!-- <p class="ingredients">
+                  Lorem, deren, trataro, filede, nerada
+                </p> -->
+                <!-- <p class="price"> -->
+                <!-- $9.95 -->
+                <!-- </p> -->
+              </div><!-- Menu Item -->
+              
+              <div class="col-lg-4 menu-item">
+                <a href="assets/img/menu/menu-item-8.jpeg" class="glightbox"><img src="assets/img/menu/menu-item-8.jpeg" class="menu-img img-fluid" alt=""></a>
+                <h4>Nasi Goreng Seafood</h4>
+              </div><!-- Menu Item -->
+              
+              <div class="col-lg-4 menu-item">
+                <a href="assets/img/menu/menu-item-9.jpeg" class="glightbox"><img src="assets/img/menu/menu-item-9.jpeg" class="menu-img img-fluid" alt=""></a>
+                <h4>Kerabu Udang</h4>
               </div><!-- Menu Item -->
 
             </div>
@@ -948,8 +969,10 @@
 
               </div>
 
-              <% if (user.ROLE === "ADMIN") { %>
-              <a href="/users/admin_page" class="my-2 text-center">View Admin Dashboard</a>
+              <% if (user.ROLE==="ADMIN" ) { %>
+              <div class="my-4">
+                <a href="/users/admin_page" class="fw-bold text-center">View Admin Dashboard</a>
+              </div>
               <% } else { %>
               <a href="/users/bookings_page" class="my-2 text-center">Manage My Bookings</a>
               <% } %>
@@ -970,6 +993,9 @@
                 </div>
                 <div>
                   <button class="book-a-table-login" type="submit">Login</button>
+                  <div id="login-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status">
+                    <span class="sr-only"></span>
+                  </div>
                 </div>
                 <a href="/users/register_page">Register new account here.</a>
               </form>
@@ -979,13 +1005,13 @@
           </div>
           <div class="col-lg-6 d-flex flex-column align-items-center reservation-form-bg" data-aos="fade-up" data-aos-delay="200">
             <div class="row">
-              <nav class="navmenu-mini">
+              <nav class="navmenu-custom m-4">
                 <ul class="nav flex-row align-items-start">
                   <li class="nav-item">
-                    <a id="new_booking_nav" class="nav-link active p-4" href="#new_booking">New Booking</a>
+                    <a id="new_booking_nav" class="nav-link custom-nav-link active" href="#new_booking">New Booking</a>
                   </li>
                   <li class="nav-item">
-                    <a class="nav-link p-4" href="#view_booking">View Guest Booking</a>
+                    <a class="nav-link custom-nav-link" href="#view_booking">View Guest Booking</a>
                   </li>
                 </ul>
               </nav>
@@ -996,8 +1022,9 @@
                   <% if (typeof user !=='undefined' && user) { %>
                   <p class="mx-4"></p>
                   <% } else { %>
-                  <p class="mx-4">Book a table as a guest now, and seamlessly link your reservation to your email when you <a href="/users/register_page"> register an account with us. </a></p>
-                  <% }  %>
+                  <p class="mx-4">Book a table as a guest now, and seamlessly link your reservation to your email
+                    when you <a href="/users/register_page"> register an account with us. </a></p>
+                  <% } %>
                 </div>
               </div>
               <form class="php-email-form" id="guestBookForm">
@@ -1027,7 +1054,8 @@
                 <div class="mb-3">
                   <div id="booking_loading" class="loading">Loading</div>
                   <div id="booking_err" class="error-message"></div>
-                  <div id="booking_sent" class="sent-message">Your booking request was sent. We will call back or send an Email to confirm
+                  <div id="booking_sent" class="sent-message">Your booking request was sent. We will call back or send
+                    an Email to confirm
                     your reservation. Thank you!</div>
                 </div>
                 <div class="text-center"><button type="submit">Book a Table</button></div>
@@ -1096,14 +1124,13 @@
             }
           </script>
           <div class="swiper-wrapper align-items-center">
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-1.jpg"><img src="assets/img/gallery/gallery-1.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-2.jpg"><img src="assets/img/gallery/gallery-2.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-3.jpg"><img src="assets/img/gallery/gallery-3.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-4.jpg"><img src="assets/img/gallery/gallery-4.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-5.jpg"><img src="assets/img/gallery/gallery-5.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-6.jpg"><img src="assets/img/gallery/gallery-6.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-7.jpg"><img src="assets/img/gallery/gallery-7.jpg" class="img-fluid" alt=""></a></div>
-            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/gallery/gallery-8.jpg"><img src="assets/img/gallery/gallery-8.jpg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/seri-padi/happy_4.jpeg"><img src="assets/img/seri-padi/happy_4.jpeg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/seri-padi/view_1.jpeg"><img src="assets/img/seri-padi/view_1.jpeg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/seri-padi/happy_1.jpeg"><img src="assets/img/seri-padi/happy_1.jpeg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/seri-padi/view_2.jpeg"><img src="assets/img/seri-padi/view_2.jpeg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/seri-padi/happy_2.jpeg"><img src="assets/img/seri-padi/happy_2.jpeg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/seri-padi/view_3.jpeg"><img src="assets/img/seri-padi/view_3.jpeg" class="img-fluid" alt=""></a></div>
+            <div class="swiper-slide"><a class="glightbox" data-gallery="images-gallery" href="assets/img/seri-padi/happy_3.jpeg"><img src="assets/img/seri-padi/happy_3.jpeg" class="img-fluid" alt=""></a></div>
           </div>
           <div class="swiper-pagination"></div>
         </div>
@@ -1271,6 +1298,10 @@
   <script>
     document.addEventListener('DOMContentLoaded', function() {
       const user = <%- JSON.stringify(user) %>;
+      const loginSpinner = document.getElementById('login-spinner');
+      if (loginSpinner) {
+        loginSpinner.style.display = 'none';
+      }
 
       if (user) {
         console.log(user);
@@ -1395,14 +1426,16 @@
         }
       }
 
-      fetchBookings().then(bookings => {
-        console.log(bookings);
-        // displayTables(tables);
-        displayBookings(bookings);
-      }).catch(error => {
-        console.error('Error fetching and displaying tables:', error);
-        //Handle error display if needed
-      });
+      if (user) {
+        fetchBookings().then(bookings => {
+          console.log(bookings);
+          // displayTables(tables);
+          displayBookings(bookings);
+        }).catch(error => {
+          console.error('Error fetching and displaying bookings:', error);
+          //Handle error display if needed
+        });
+      }
     });
   </script>
 
