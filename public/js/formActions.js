@@ -30,6 +30,7 @@ if (document.getElementById('loginForm')) {
       } else {
         document.getElementById('message').textContent = result.error;
         document.getElementById('message').style.color = 'red';
+        document.getElementById('login-spinner').style.display = 'none';
       }
     } catch (error) {
       console.error('Error during login:', error);

@@ -39,7 +39,7 @@
 <body class="index-page">
 
   <header id="header" class="header d-flex align-items-center sticky-top">
-    <div class="container position-relative d-flex align-items-center justify-content-between">
+    <div class="container position-relative d-flex flex-sm-row-reverse flex-lg-row align-items-center justify-content-between">
 
       <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
@@ -54,7 +54,16 @@
           <li><a href="#menu">Menu</a></li>
           <li><a href="#book-a-table">Book a Table</a></li>
           <li><a href="#contact">Contact</a></li>
+
+          <% if (typeof user !=='undefined' && user) { %>
+          <% if(user.ROLE === 'ADMIN') {  %>
+          <li><a href="/users/admin_page">Admin Dashboard</a></li>
+          <% } else { %>
           <li><a href="/users/bookings_page">My Bookings</a></li>
+          <% } %>
+          <% } else { %>
+          <li><a href="/users/bookings_page">My Bookings</a></li>
+          <% } %>
           <!-- <li><a href="/users/bookings_page">My Bookings</a></li> -->
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
@@ -1075,10 +1084,11 @@
             <div id="view_booking" class="section-content">
               <div class="row d-flex flex-column justify-content-center">
                 <div class="col-lg-12 col-md-12 d-flex flex-column justify-content-center">
-                  <p class="align-self-center mt-2">View Guest Booking</p>
+                  <p class="align-self-center mt-2">Enter Booking ID to check status. (Example: abcd1234)</p>
                 </div>
                 <div class="col-lg-12 col-md-12 d-flex flex-column justify-content-center">
-                  <input type="text" name="bookingId" class="form-control my-4" id="bookingId" placeholder="Booking ID" required="">
+                  <input type="text" name="bookingId" class="form-control my-4" id="bookingId" maxlength="10" placeholder="Booking ID" required="">
+                  <p class="align-self-center text-danger" id="bookingInputWrn" style="display:none;"><em>Please enter Booking ID</em></p>
                 </div>
                 <div class="text-center">
                   <button id="guest-booking-btn" class="book-a-table-login">View Booking</button>
@@ -1100,7 +1110,7 @@
                     </tbody>
                   </table>
                   <div id="bookingNotFound" style="display: none;">
-                    <p>No booking found for the provided ID.</p>
+                    <p class="text-danger align-self-center"><em>No booking found for the provided ID.</em></p>
                   </div>
                 </div>
               </div>
@@ -1423,7 +1433,7 @@
             row.appendChild(capacityCell);
 
             const statusCell = document.createElement('td');
-            statusCell.textContent = booking.BOOKING_STATUS;
+            statusCell.textContent = getStatusText(booking.BOOKING_STATUS);
             row.appendChild(statusCell);
 
             tbody.appendChild(row);
@@ -1481,7 +1491,17 @@
       const bookingNotFoundDiv = document.getElementById('bookingNotFound');
 
       guestBookingBtn.addEventListener('click', async function() {
+
         document.getElementById('guest-spinner').style.display = 'inline-block';
+
+        if (!bookingIdInput.value) {
+          document.getElementById('bookingInputWrn').style.display = 'block';
+          document.getElementById('guest-spinner').style.display = 'none';
+          return
+        } else {
+          document.getElementById('bookingInputWrn').style.display = 'none';
+        }
+
         const bookingId = bookingIdInput.value.trim();
 
         try {
@@ -1515,6 +1535,7 @@
             // Display message for no booking found
             bookingDetailsTable.innerHTML = '';
             bookingNotFoundDiv.style.display = 'block';
+            document.getElementById('guest-spinner').style.display = 'none';
           }
         } catch (error) {
           console.error('Error fetching or processing bookings:', error);
