@@ -41,7 +41,7 @@
   <header id="header" class="header d-flex align-items-center sticky-top">
     <div class="container position-relative d-flex align-items-center justify-content-between">
 
-      <a href="index.html" class="logo d-flex align-items-center me-auto me-xl-0">
+      <a href="/" class="logo d-flex align-items-center me-auto me-xl-0">
         <!-- Uncomment the line below if you also wish to use an image logo -->
         <!-- <img src="assets/img/logo.png" alt=""> -->
         <h1 class="sitename">Seri Padi De Cabin</h1>
@@ -369,7 +369,7 @@
                 <!-- $9.95 -->
                 <!-- </p> -->
               </div><!-- Menu Item -->
-              
+
               <div class="col-lg-4 menu-item">
                 <a href="assets/img/menu/menu-item-7.jpeg" class="glightbox"><img src="assets/img/menu/menu-item-6.jpeg" class="menu-img img-fluid" alt=""></a>
                 <h4>Kuey Tiow Celup</h4>
@@ -380,12 +380,12 @@
                 <!-- $9.95 -->
                 <!-- </p> -->
               </div><!-- Menu Item -->
-              
+
               <div class="col-lg-4 menu-item">
                 <a href="assets/img/menu/menu-item-8.jpeg" class="glightbox"><img src="assets/img/menu/menu-item-8.jpeg" class="menu-img img-fluid" alt=""></a>
                 <h4>Nasi Goreng Seafood</h4>
               </div><!-- Menu Item -->
-              
+
               <div class="col-lg-4 menu-item">
                 <a href="assets/img/menu/menu-item-9.jpeg" class="glightbox"><img src="assets/img/menu/menu-item-9.jpeg" class="menu-img img-fluid" alt=""></a>
                 <h4>Kerabu Udang</h4>
@@ -1061,7 +1061,7 @@
                 <div class="text-center"><button type="submit">Book a Table</button></div>
               </form>
             </div>
-            <div id="view_booking" class="section-content">
+            <!-- <div id="view_booking" class="section-content">
               <div class="row d-flex flex-column justify-content-center">
                 <div class="col-lg-12 col-md-12 d-flex flex-column justify-content-center">
                   <p class="align-self-center mt-2">View guest booking</p>
@@ -1069,9 +1069,43 @@
                 <div class="col-lg-12 col-md-12 d-flex flex-column justify-content-center">
                   <input type="text" name="name" class="form-control my-4" id="name" placeholder="Booking ID" required="">
                 </div>
-                <div class="text-center"><button class="book-a-table-login ">View Booking</button></div>
+                <div class="text-center"><button id="guest-booking-btn" class="book-a-table-login ">View Booking</button></div>
+              </div>
+            </div> -->
+            <div id="view_booking" class="section-content">
+              <div class="row d-flex flex-column justify-content-center">
+                <div class="col-lg-12 col-md-12 d-flex flex-column justify-content-center">
+                  <p class="align-self-center mt-2">View Guest Booking</p>
+                </div>
+                <div class="col-lg-12 col-md-12 d-flex flex-column justify-content-center">
+                  <input type="text" name="bookingId" class="form-control my-4" id="bookingId" placeholder="Booking ID" required="">
+                </div>
+                <div class="text-center">
+                  <button id="guest-booking-btn" class="book-a-table-login">View Booking</button>
+                  <div id="guest-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status" style="display: none;">
+                    <span class="sr-only"></span>
+                  </div>
+                </div>
+                <div class="col-lg-12 col-md-12 mt-4">
+                  <table id="bookingDetailsTable" class="table table-responsive" style="display: none;">
+                    <thead>
+                      <tr>
+                        <th scope="col">Booking Name</th>
+                        <th scope="col">Date</th>
+                        <th scope="col">Capacity</th>
+                        <th scope="col">Status</th>
+                      </tr>
+                    </thead>
+                    <tbody id="bookingDetailsTableBody">
+                    </tbody>
+                  </table>
+                  <div id="bookingNotFound" style="display: none;">
+                    <p>No booking found for the provided ID.</p>
+                  </div>
+                </div>
               </div>
             </div>
+
 
           </div><!-- End Reservation Form -->
 
@@ -1419,7 +1453,9 @@
             const tables = await response.json();
             return tables;
           } else {
-            throw new Error('User is not defined');
+            response = await fetch('/bookings')
+            const bookings = await response.json();
+            return bookings;
           }
         } catch (error) {
           throw new Error('Error fetching tables: ' + error.message);
@@ -1436,6 +1472,70 @@
           //Handle error display if needed
         });
       }
+
+      const guestBookingBtn = document.getElementById('guest-booking-btn');
+      const bookingIdInput = document.getElementById('bookingId');
+      // const bookingDetailsDiv = document.getElementById('bookingDetails');
+      const bookingDetailsTable = document.getElementById('bookingDetailsTable');
+      const bookingDetailsTableBody = bookingDetailsTable.querySelector('#bookingDetailsTableBody');
+      const bookingNotFoundDiv = document.getElementById('bookingNotFound');
+
+      guestBookingBtn.addEventListener('click', async function() {
+        document.getElementById('guest-spinner').style.display = 'inline-block';
+        const bookingId = bookingIdInput.value.trim();
+
+        try {
+          // Fetch the list of bookings (already fetched and stored as `bookingsList`)
+          const bookingsList = await fetchBookings(); // Assuming you have a function fetchBookings() that fetches bookings
+
+          // Find the booking with the provided ID
+          const foundBooking = bookingsList.find(booking => booking.ID_BOOKING === bookingId);
+
+          if (foundBooking) {
+            document.getElementById('guest-spinner').style.display = 'none';
+            console.log('heho - ' + foundBooking)
+            // Display the booking details
+            //   bookingDetailsDiv.innerHTML = `
+            // <p><strong>Booking Name:</strong> ${foundBooking.BOOKING_NAME}</p>
+            // <p><strong>Date:</strong> ${new Date(foundBooking.BOOKING_DATE).toLocaleDateString()}</p>
+            // <p><strong>Capacity:</strong> ${foundBooking.BOOKING_PAX}</p>
+            // <p><strong>Status:</strong> ${getStatusText(foundBooking.BOOKING_STATUS)}</p>
+            // `;
+            bookingDetailsTableBody.innerHTML = `
+          <tr>
+            <td>${foundBooking.BOOKING_NAME}</td>
+            <td>${new Date(foundBooking.BOOKING_DATE).toLocaleDateString()}</td>
+            <td>${foundBooking.BOOKING_PAX}</td>
+            <td>${getStatusText(foundBooking.BOOKING_STATUS)}</td>
+          </tr>
+        `;
+            bookingDetailsTable.style.display = 'block';
+            bookingNotFoundDiv.style.display = 'none';
+          } else {
+            // Display message for no booking found
+            bookingDetailsTable.innerHTML = '';
+            bookingNotFoundDiv.style.display = 'block';
+          }
+        } catch (error) {
+          console.error('Error fetching or processing bookings:', error);
+          // Handle error fetching bookings
+        }
+      });
+
+      // Helper function to get status text based on status code
+      function getStatusText(statusCode) {
+        switch (statusCode) {
+          case 'N':
+            return 'New';
+          case 'C':
+            return 'Confirmed';
+          case 'X':
+            return 'Cancelled';
+          default:
+            return 'Unknown';
+        }
+      }
+
     });
   </script>
 

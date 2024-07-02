@@ -126,6 +126,19 @@ export default class Database {
         return result.recordset[0];
     }
 
+    async readWithClause(table, conditions) {
+        await this.connect();
+        // Implement logic to fetch a single record based on conditions
+        // Example with MSSQL (assuming you're using a SQL database)
+        const query = `SELECT * FROM ${table} WHERE ${Object.keys(conditions)[0]} = '${conditions[Object.keys(conditions)[0]]}'`;
+
+        // Execute the query and return the result
+        const request = this.poolconnection.request();
+        const result = await request.query(query);
+
+        return result.recordset[0];
+    }
+
     async readMany(tableName, id_var, id) {
         await this.connect();
 

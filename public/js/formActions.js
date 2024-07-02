@@ -115,6 +115,7 @@ if (document.getElementById('registerForm')) {
     const password = document.getElementById('reg_password').value;
 
     try {
+      document.getElementById('reg-spinner').style.display = 'inline-block';
       const response = await fetch('/users', {
         method: 'POST',
         headers: {
@@ -126,15 +127,18 @@ if (document.getElementById('registerForm')) {
       const result = await response.json();
 
       if (response.ok) {
+        document.getElementById('reg-spinner').style.display = 'none';
         document.getElementById('registerMessage').textContent = 'Registration successful! You can now log in.';
         document.getElementById('registerMessage').style.color = 'green';
         document.getElementById('registerForm').reset();
       } else {
+        document.getElementById('reg-spinner').style.display = 'none';
         document.getElementById('registerMessage').textContent = result.error;
         document.getElementById('registerMessage').style.color = 'red';
       }
     } catch (error) {
       console.error('Error during registration:', error);
+      document.getElementById('reg-spinner').style.display = 'none';
       document.getElementById('registerMessage').textContent = 'An error occurred. Please try again.';
       document.getElementById('registerMessage').style.color = 'red';
     }

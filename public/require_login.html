@@ -101,6 +101,9 @@
                 <input class="form-control" type="password" id="reg_password" name="password" required>
               </div>
               <button class="book-a-table-login" type="submit">Register</button>
+              <div id="reg-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status">
+                <span class="sr-only"></span>
+              </div>
               <p id="registerMessage"></p>
             </form>
           </div>
@@ -118,6 +121,9 @@
                 </div>
                 <div>
                   <button class="book-a-table-login" type="submit">Login</button>
+                  <div id="login-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status">
+                    <span class="sr-only"></span>
+                  </div>
                 </div>
               </form>
               <p id="message"></p>
@@ -191,6 +197,19 @@
   </footer>
 
   <!-- <script src="js/bookings_page.js"></script> -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const loginSpinner = document.getElementById('login-spinner');
+      const regSpinner = document.getElementById('reg-spinner');
+      if (loginSpinner) {
+        loginSpinner.style.display = 'none';
+      }
+
+      if (regSpinner) {
+        regSpinner.style.display = 'none';
+      }
+    })
+  </script>
   <script src="js/formActions.js" type="module"></script>
 
 </body>

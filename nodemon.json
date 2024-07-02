@@ -7,7 +7,7 @@
         "db",
         "views"
     ],
-    "ext": "js,json,yml,yaml",
+    "ext": "js,json,yml,yaml,ejs",
     "ignore": [
         "node_modules"
     ],

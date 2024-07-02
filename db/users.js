@@ -23,7 +23,41 @@ const DB_TABLE_PK = 'ID_USER';
 
 router.post('/', async (req, res) => {
   try {
+
+    let emailFlag = false;
+    let usernameFlag = false;
+
     const data = req.body;
+    console.log(data);
+    const existingEmail = await database.readWithClause(DB_TABLE, { EMAIL: data.EMAIL });
+    if (existingEmail) {
+      console.log('existing email found');
+      // return res.status(400).json({ error: "Email already exists" });
+      emailFlag = true;
+    }
+
+    const existingUsername = await database.readWithClause(DB_TABLE, { USERNAME: data.USERNAME });
+    if (existingUsername) {
+      // return res.status(400).json({ error: "Username already exists" });
+      usernameFlag = true;
+    }
+
+    if (emailFlag || usernameFlag) {
+      let errorString = " already exists"
+      const emailStr = "Email"
+      const usernameStr = "Username"
+
+      if (emailFlag && usernameFlag) {
+        errorString = emailStr + " and " + usernameStr + errorString
+      } else if (emailFlag) {
+        errorString = emailStr + errorString
+      } else if (usernameStr) {
+        errorString = usernameStr + errorString
+      }
+
+      return res.status(400).json({ error: errorString });
+    }
+
     const saltRounds = 10;
     const salt = await bcrypt.genSalt(saltRounds);
     const hashedPassword = await bcrypt.hash(data.PASSWORD, salt);
@@ -34,6 +68,7 @@ router.post('/', async (req, res) => {
     const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
     res.status(201).json({ rowsAffected });
   } catch (err) {
+    console.log(err)
     res.status(500).json({ error: err?.message });
   }
 });
@@ -57,10 +92,10 @@ router.put('/:id', async (req, res) => {
   try {
     const tableId = req.params.id;
     const table = req.body;
-    
+
     console.log(tableId)
     console.log(table)
-    
+
     if (tableId && table) {
       delete table.id;
       const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, table);
