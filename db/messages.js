@@ -28,7 +28,11 @@ router.post('/create', async (req, res) => {
             const subject = 'Message Received';
             const text = ``;
             const html = `<p>Dear Admin,</p>
-        <p>A messsage has been received on ${data.MESSAGE_DATE}.</p>`;
+            <p>A messsage has been received.</p>
+            <p><strong>Message Subject:</strong> ${data.MESSAGE_SUBJECT}
+            <p><strong>Message Content:</strong> ${data.MESSAGE_CONTENT} 
+            <p><strong>Seri Padi De Cabin Management</strong></p>
+            `;
 
             await sendEmail(email, subject, text, html);
 
