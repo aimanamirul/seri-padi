@@ -82,23 +82,23 @@
             <form id="registerForm" method="POST">
               <div class="col-lg-8">
                 <label class="mb-2" for="name">Name</label>
-                <input class="form-control" type="text" id="name" name="name" required>
+                <input class="form-control" type="text" id="name" name="name" maxlength="50" required>
               </div>
               <div class="col-lg-8">
                 <label class="mb-2" for="tel_no">Phone Number</label>
-                <input class="form-control" type="tel" id="tel_no" name="tel_no" required>
+                <input class="form-control" type="tel" id="tel_no" name="tel_no"  maxlength="20" required>
               </div>
               <div class="col-lg-8">
                 <label class="mb-2" for="email">Email</label>
-                <input class="form-control" type="email" id="email" name="email" required>
+                <input class="form-control" type="email" id="email" name="email"  maxlength="30" required>
               </div>
               <div class="col-lg-8">
                 <label class="mb-2" for="reg_username">Username</label>
-                <input class="form-control" type="text" id="reg_username" name="username" required>
+                <input class="form-control" type="text" id="reg_username" name="username"  maxlength="50" required>
               </div>
               <div class="col-lg-8">
                 <label class="mb-2" for="reg_password">Password</label>
-                <input class="form-control" type="password" id="reg_password" name="password" required>
+                <input class="form-control" type="password" id="reg_password" name="password"  maxlength="50" required>
               </div>
               <button class="book-a-table-login" type="submit">Register</button>
               <div id="reg-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status">
@@ -113,11 +113,11 @@
               <form id="loginForm">
                 <div class="col-lg-6 form-group">
                   <label class="mb-2" for="username">Username:</label>
-                  <input type="text" id="username" name="username" class="form-control" required>
+                  <input type="text" id="username" name="username" class="form-control"  maxlength="50" required>
                 </div>
                 <div class="col-lg-6 form-group">
                   <label class="mb-2" for="password">Password:</label>
-                  <input type="password" id="password" name="password" class="form-control" required>
+                  <input type="password" id="password" name="password" class="form-control"  maxlength="50" required>
                 </div>
                 <div>
                   <button class="book-a-table-login" type="submit">Login</button>

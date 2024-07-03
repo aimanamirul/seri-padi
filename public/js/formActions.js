@@ -116,14 +116,14 @@ if (document.getElementById('registerForm')) {
     const password = document.getElementById('reg_password').value;
 
     // Validation
-    if (username === password) {
-      document.getElementById('registerMessage').textContent = 'Username cannot match the password.';
+    if (password.includes(username)) {
+      document.getElementById('registerMessage').textContent = 'Password cannot contain username!';
       document.getElementById('registerMessage').style.color = 'red';
       return;
     }
 
     if (!/^\d+$/.test(tel_no)) {
-      document.getElementById('registerMessage').textContent = 'Telephone number can only contain numeric values.';
+      document.getElementById('registerMessage').textContent = 'Telephone number can only contain numeric values!';
       document.getElementById('registerMessage').style.color = 'red';
       return;
     }
@@ -215,7 +215,7 @@ if (document.getElementById('resetPasswordProfileForm')) {
     const userName = document.getElementById('userName').value;
 
     // Validation
-    if (userName === newPassword) {
+    if (newPassword.includes(userName)) {
       document.getElementById('resetMessage').textContent = 'Username cannot match the password.';
       document.getElementById('resetMessage').style.color = 'red';
       return;
