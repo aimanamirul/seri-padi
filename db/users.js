@@ -4,9 +4,14 @@ import Database from './database.js';
 import Booking from './bookings.js'
 import bcrypt from 'bcrypt';
 import path from 'path';
-
+import { sendEmail } from '../util/emailer.js';
+import generateRandomString from '../util/generateRandomString.js';
 import { fileURLToPath } from 'url';
 import { dirname } from 'path';
+
+import dotenv from 'dotenv';
+dotenv.config();
+const siteUrl = process.env.SITE_URL;
 
 // const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.resolve();
@@ -233,6 +238,105 @@ router.get('/register_page', async (req, res) => {
   } catch (err) {
     // console.error('Error fetching bookings:', err);
     // res.status(500).json({ error: 'Failed to fetch bookings' });
+  }
+});
+
+router.get('/forgot_password/:verifyCode?', async (req, res) => {
+  try {
+    const verifyCode = req.params.verifyCode || req.query.verifyCode;
+    if (verifyCode) {
+      const user = await database.readWithClause(DB_TABLE, { VERIFY_CODE: verifyCode });
+      res.render('user_reset', { user: user || {} });
+    } else {
+      res.render('user_reset', { user: {} });
+    }
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).json({ error: 'Failed to process request' });
+  }
+});
+
+router.post('/forgot_password', async (req, res) => { //send email and generate verify code
+  try {
+    const data = req.body;
+    const existingEmailUser = await database.readWithClause(DB_TABLE, { EMAIL: data.EMAIL });
+    if (existingEmailUser) {
+      console.log('user ' + JSON.stringify(existingEmailUser))
+
+      const tableId = existingEmailUser.ID_USER;
+      const verifyCode = generateRandomString(10)
+      const table = { "VERIFY_CODE": verifyCode };
+
+      console.log(tableId)
+      console.log(table)
+
+      if (tableId && table) {
+        delete table.id;
+        const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, table);
+
+        if (rowsAffected) {
+          const subject = 'Password Reset Request';
+          const text = `Dear ${existingEmailUser.NAME}, we have received a password reset request.`;
+          const html = `<p>Dear ${existingEmailUser.NAME},</p>
+      <p>We have received a password reset request.</p>
+      <p>Please proceed to the following link to reset your password.</p>
+      <a href="${siteUrl}/users/forgot_password/${verifyCode}">Reset Password Link</a>
+      <p>Thank you.</p>
+      <p><strong>Seri Padi De Cabin Management</strong></p>
+      `;
+
+          await sendEmail(existingEmailUser.EMAIL, subject, text, html);
+        }
+
+        res.status(200).json({ rowsAffected });
+      } else {
+        res.status(404).json({ error: 'An Error has occurred! Please try again later.' });
+      }
+    } else {
+      let errorString = "Email address not found";
+      return res.status(400).json({ error: errorString });
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: err?.message });
+  }
+
+});
+
+router.post('/reset_password', async (req, res) => {
+  try {
+    console.log('reset password route')
+    const data = req.body;
+    const existingEmailUser = await database.readWithClause(DB_TABLE, { ID_USER: data.ID_USER });
+    if (existingEmailUser) {
+      console.log('user ' + JSON.stringify(existingEmailUser))
+
+      const tableId = existingEmailUser.ID_USER;
+      // const table = {PASSWORD};
+
+      console.log(tableId)
+      console.log(data)
+
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await bcrypt.hash(data.PASSWORD, salt);
+      data.PASSWORD = hashedPassword;
+      data.VERIFY_CODE = null;
+
+      if (tableId && data) {
+        delete data.ID_USER;
+        const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, data);
+        res.status(200).json({ rowsAffected });
+      } else {
+        res.status(404).json({ error: 'An Error has occurred! Please try again later.' });
+      }
+    } else {
+      let errorString = "No user was found.";
+      return res.status(400).json({ error: errorString });
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: err?.message });
   }
 });
 

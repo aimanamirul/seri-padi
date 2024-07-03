@@ -115,6 +115,19 @@ if (document.getElementById('registerForm')) {
     const username = document.getElementById('reg_username').value;
     const password = document.getElementById('reg_password').value;
 
+    // Validation
+    if (username === password) {
+      document.getElementById('registerMessage').textContent = 'Username cannot match the password.';
+      document.getElementById('registerMessage').style.color = 'red';
+      return;
+    }
+
+    if (!/^\d+$/.test(tel_no)) {
+      document.getElementById('registerMessage').textContent = 'Telephone number can only contain numeric values.';
+      document.getElementById('registerMessage').style.color = 'red';
+      return;
+    }
+
     try {
       document.getElementById('reg-spinner').style.display = 'inline-block';
       const response = await fetch('/users', {
@@ -142,6 +155,89 @@ if (document.getElementById('registerForm')) {
       document.getElementById('reg-spinner').style.display = 'none';
       document.getElementById('registerMessage').textContent = 'An error occurred. Please try again.';
       document.getElementById('registerMessage').style.color = 'red';
+    }
+  });
+}
+
+if (document.getElementById('resetPasswordForm')) {
+  document.getElementById('resetPasswordForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const userID = document.getElementById('userID').value;
+
+    // Validation
+    if (newPassword !== confirmPassword) {
+      document.getElementById('registerMessage').textContent = 'Confirm password doesn\'t match.';
+      document.getElementById('registerMessage').style.color = 'red';
+      return;
+    }
+
+    try {
+      document.getElementById('reg-spinner').style.display = 'inline-block';
+      const response = await fetch('/users/reset_password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ ID_USER: userID, PASSWORD: newPassword })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        document.getElementById('reg-spinner').style.display = 'none';
+        document.getElementById('registerMessage').textContent = 'Password reset successful! You can now log in.';
+        document.getElementById('registerMessage').style.color = 'green';
+        document.getElementById('resetPasswordForm').reset();
+      } else {
+        document.getElementById('reg-spinner').style.display = 'none';
+        document.getElementById('registerMessage').textContent = result.error;
+        document.getElementById('registerMessage').style.color = 'red';
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      document.getElementById('reg-spinner').style.display = 'none';
+      document.getElementById('registerMessage').textContent = 'An error occurred. Please try again.';
+      document.getElementById('registerMessage').style.color = 'red';
+    }
+  });
+}
+
+if (document.getElementById('emailVerifyForm')) {
+  document.getElementById('emailVerifyForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const email = document.getElementById('email').value;
+
+    try {
+      document.getElementById('reg-spinner').style.display = 'inline-block';
+      const response = await fetch('/users/forgot_password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ EMAIL: email })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        document.getElementById('reg-spinner').style.display = 'none';
+        document.getElementById('verifyMessage').textContent = 'Please check your email for verification code.';
+        document.getElementById('verifyMessage').style.color = 'green';
+        document.getElementById('emailVerifyForm').reset();
+      } else {
+        document.getElementById('reg-spinner').style.display = 'none';
+        document.getElementById('verifyMessage').textContent = result.error;
+        document.getElementById('verifyMessage').style.color = 'red';
+      }
+    } catch (error) {
+      console.error('Error during registration:', error);
+      document.getElementById('reg-spinner').style.display = 'none';
+      document.getElementById('verifyMessage').textContent = 'An error occurred. Please try again.';
+      document.getElementById('verifyMessage').style.color = 'red';
     }
   });
 }
