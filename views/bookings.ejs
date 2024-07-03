@@ -88,6 +88,9 @@
                 <li class="nav-item">
                   <a class="nav-link" href="#my_profile">My Profile</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" href="#pwd_reset">Reset Password</a>
+                </li>
               </ul>
             </nav>
           </div>
@@ -142,8 +145,6 @@
               </div>
             </div>
 
-
-
             <div id="booking_new" class="section-content">
               <h4 class="mb-4">Create A New Booking</h4>
               <div class="reservation-form-bg">
@@ -182,6 +183,37 @@
 
             </div>
 
+            <div id="pwd_reset" class="section-content">
+              <h4 class="mb-4">Reset Your Password</h4>
+              <form id="resetPasswordProfileForm" method="POST">
+                <input type="hidden" class="form-control" id="userName" name="userName" value="<%= user.USERNAME %>" required>
+                <div class="col-lg-8">
+                  <label class="mb-2" for="name">Current Password</label>
+                  <input class="form-control" type="password" id="oldPassword" name="oldPassword" required>
+                </div>
+                <div class="col-lg-8">
+                  <label class="mb-2" for="name">New Password</label>
+                  <input class="form-control" type="password" id="newPassword" name="newPassword" required>
+                </div>
+                <div class="col-lg-8">
+                  <label class="mb-2" for="name">Confirm New Password</label>
+                  <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" required>
+                </div>
+
+                <button class="book-a-table-login my-4" type="submit">Save New Password</button>
+                <div id="reset-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" style="display: none;" role="status">
+                  <span class="sr-only"></span>
+                </div>
+                <div class="col-8">
+                  <span id="logout-spinner" class="spinner-border spinner-border-sm text-success mx-3" style="display: none;" role="status">
+                    <span class="sr-only"></span>
+                  </span>
+                  <span id="resetMessage">
+                  </span>
+                </div>
+              </form>
+
+            </div>
             <div id="my_profile" class="section-content">
               <h4 class="mb-4">View & Update Your Profile</h4>
               <form id="profileForm" method="POST">
@@ -197,7 +229,7 @@
                   <label class="mb-2" for="email">Email</label>
                   <input class="form-control" type="email" id="email" name="email" value="<%= user.EMAIL %>" required>
                 </div>
-                <button class="book-a-table-login" type="submit">Save</button>
+                <button class="book-a-table-login my-4" type="submit">Save</button>
                 <p id="registerMessage"></p>
               </form>
             </div>
@@ -268,6 +300,9 @@
     </div>
 
   </footer>
+
+  <a href="#" id="scroll-top" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+
   <script>
     const userId = '<%= user.ID_USER %>';
 

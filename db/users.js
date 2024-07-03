@@ -172,7 +172,17 @@ router.post('/login', async (req, res) => {
 //   // res.sendFile(path.join(__dirname, 'public', 'bookings.html'));
 // });
 
-router.get('/bookings_page', async (req, res) => {
+function requireAuth(req, res, next) {
+  if (req.session.user) {
+    next();
+  } else {
+    // res.redirect('/login'); // Redirect to login if not authenticated
+    const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
+    return res.sendFile(htmlPath);
+  }
+}
+
+router.get('/bookings_page', requireAuth, async (req, res) => {
   try {
     if (!req.session.user) {
       // If user is not logged in, return a page indicating login is required
@@ -189,6 +199,7 @@ router.get('/bookings_page', async (req, res) => {
       console.log('Bookings:', bookingsList);
 
       // Render the bookings.ejs file with the bookings data
+      res.setHeader('Cache-Control', 'no-cache, no-store, must-revalidate');
       res.render('bookings', { bookingsList, user });
     }
   } catch (err) {
@@ -301,6 +312,44 @@ router.post('/forgot_password', async (req, res) => { //send email and generate 
     res.status(500).json({ error: err?.message });
   }
 
+});
+
+router.post('/profile_reset_password', async (req, res) => {
+  try {
+    const data = req.body;
+    // const existingEmailUser = await database.readWithClause(DB_TABLE, { ID_USER: data.ID_USER });
+    const user = await database.authenticateUser(data.USERNAME, data.OLD_PASSWORD);
+    if (user) {
+      console.log('user ' + JSON.stringify(user))
+
+      const tableId = user.ID_USER;
+      // const table = {PASSWORD};
+      const updateData = { PASSWORD: data.PASSWORD };
+
+      // console.log(tableId)
+      // console.log(data)
+
+      const saltRounds = 10;
+      const salt = await bcrypt.genSalt(saltRounds);
+      const hashedPassword = await bcrypt.hash(data.PASSWORD, salt);
+      updateData.PASSWORD = hashedPassword;
+      // data.VERIFY_CODE = null;
+
+      if (tableId && data) {
+        delete data.ID_USER;
+        const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, updateData);
+        res.status(200).json({ rowsAffected });
+      } else {
+        res.status(404).json({ error: 'An Error has occurred! Please try again later.' });
+      }
+    } else {
+      let errorString = "Unable to authenticate! Please enter correct current password.";
+      return res.status(400).json({ error: errorString });
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: err?.message });
+  }
 });
 
 router.post('/reset_password', async (req, res) => {

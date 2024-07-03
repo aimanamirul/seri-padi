@@ -205,6 +205,78 @@ if (document.getElementById('resetPasswordForm')) {
   });
 }
 
+if (document.getElementById('resetPasswordProfileForm')) {
+  document.getElementById('resetPasswordProfileForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const oldPassword = document.getElementById('oldPassword').value;
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+    const userName = document.getElementById('userName').value;
+
+    // Validation
+    if (userName === newPassword) {
+      document.getElementById('resetMessage').textContent = 'Username cannot match the password.';
+      document.getElementById('resetMessage').style.color = 'red';
+      return;
+    }
+
+    if (newPassword !== confirmPassword) {
+      document.getElementById('resetMessage').textContent = 'Confirm password doesn\'t match.';
+      document.getElementById('resetMessage').style.color = 'red';
+      return;
+    }
+
+    try {
+      document.getElementById('reset-spinner').style.display = 'inline-block';
+      const response = await fetch('/users/profile_reset_password', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ USERNAME: userName, PASSWORD: newPassword, OLD_PASSWORD: oldPassword })
+      });
+
+      const result = await response.json();
+
+      if (response.ok) {
+        document.getElementById('reset-spinner').style.display = 'none';
+        document.getElementById('resetMessage').textContent = 'Password reset successful! You will now be logged out.';
+        document.getElementById('logout-spinner').style.display = 'inline-block';
+        document.getElementById('resetMessage').style.color = 'green';
+        document.getElementById('resetPasswordProfileForm').reset();
+
+        setTimeout(async () => {
+          try {
+            const logoutResponse = await fetch('/users/logout', {
+              method: 'POST',
+            });
+
+            if (logoutResponse.ok) {
+              window.location.href = '/#book-a-table'; // Redirect to homepage after logout
+            } else {
+              alert('Logout failed');
+            }
+          } catch (logoutError) {
+            console.error('Error during logout:', logoutError);
+            alert('Logout failed');
+          }
+        }, 2000);
+
+      } else {
+        document.getElementById('reset-spinner').style.display = 'none';
+        document.getElementById('resetMessage').textContent = result.error;
+        document.getElementById('resetMessage').style.color = 'red';
+      }
+    } catch (error) {
+      console.error('Error during password reset:', error);
+      document.getElementById('reset-spinner').style.display = 'none';
+      document.getElementById('resetMessage').textContent = 'An error occurred. Please try again.';
+      document.getElementById('resetMessage').style.color = 'red';
+    }
+  });
+}
+
 if (document.getElementById('emailVerifyForm')) {
   document.getElementById('emailVerifyForm').addEventListener('submit', async (event) => {
     event.preventDefault();
