@@ -122,6 +122,7 @@ if (document.getElementById('registerForm')) {
       return;
     }
 
+    //numeric regex
     if (!/^\d+$/.test(tel_no)) {
       document.getElementById('registerMessage').textContent = 'Telephone number can only contain numeric values!';
       document.getElementById('registerMessage').style.color = 'red';
