@@ -16,6 +16,12 @@ router.get('/', async (_, res) => {
     // Return a list of bookings
     const bookings = await database.readAll(DB_TABLE);
     // console.log(`bookings: ${JSON.stringify(bookings)}`);
+
+    const dateObj = new Date(bookings.BOOKING_DATE);
+    const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+    const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+    bookings.BOOKING_DATE = `${formattedDate} ${formattedTime}`;
+
     res.status(200).json(bookings);
   } catch (err) {
     res.status(500).json({ error: err?.message });
@@ -125,10 +131,16 @@ router.get('/fetch_by_email/:email', async (req, res) => {
     // Get the table with the specified ID
     const tableEmail = req.params.email;
     console.log(req.params);
-    console.log(`tableEmail: ${ tableEmail}`);
+    console.log(`tableEmail: ${tableEmail}`);
     if (tableEmail) {
       // const result = await database.read(DB_TABLE, DB_TABLE_PK, tableID);
       const result = await fetchBookingsForEmail(tableEmail);
+
+      const dateObj = new Date(result.BOOKING_DATE);
+      const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+      const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+      result.BOOKING_DATE = `${formattedDate} ${formattedTime}`;
+
       console.log(`tables: ${JSON.stringify(result)}`);
       res.status(200).json(result);
     } else {

@@ -426,6 +426,15 @@ async function fetchBookingsAll() {
   try {
     // Query the database for bookings associated with the user
     const result = await database.readAll("SP_BOOKINGS");
+
+    result.forEach(booking => {
+      const dateObj = new Date(booking.BOOKING_DATE);
+      const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+      const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+      booking.BOOKING_DATE = `${formattedDate} ${formattedTime}`;
+      console.log(booking.BOOKING_DATE)
+    });
+
     return result; // Return the fetched bookings data
   } catch (err) {
     throw new Error(`Failed to fetch bookings: ${err.message}`);
@@ -442,10 +451,24 @@ async function fetchUserById(id) {
   }
 }
 
+function padZero(num) {
+  return num.toString().padStart(2, '0');
+}
+
 async function fetchBookingsForEmail(email) {
   try {
     // Query the database for bookings associated with the user
-    const result = await database.readMany("SP_BOOKINGS", "BOOKING_EMAIL", email);
+    let result = await database.readMany("SP_BOOKINGS", "BOOKING_EMAIL", email);
+
+    result.forEach(booking => {
+      const dateObj = new Date(booking.BOOKING_DATE);
+      const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+      const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+      booking.BOOKING_DATE = `${formattedDate} ${formattedTime}`;
+      console.log(booking.BOOKING_DATE)
+    });
+
+
     return result; // Return the fetched bookings data
   } catch (err) {
     throw new Error(`Failed to fetch bookings: ${err.message}`);

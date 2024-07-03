@@ -192,6 +192,11 @@ if (document.getElementById('resetPasswordForm')) {
         document.getElementById('registerMessage').textContent = 'Password reset successful! You can now log in.';
         document.getElementById('registerMessage').style.color = 'green';
         document.getElementById('resetPasswordForm').reset();
+
+        setTimeout(async () => {
+          window.location.href = '/#book-a-table'; // Redirect to homepage after logout
+        }, 2000);
+
       } else {
         document.getElementById('reg-spinner').style.display = 'none';
         document.getElementById('registerMessage').textContent = result.error;

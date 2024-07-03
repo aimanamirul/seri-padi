@@ -155,7 +155,7 @@
                       <td><%= index + 1 %></td>
                       <td><%= booking.BOOKING_NAME %></td>
                       <td><%= booking.BOOKING_REMARKS %></td>
-                      <td><%= booking.BOOKING_DATE.toDateString() %></td>
+                      <td><%= booking.BOOKING_DATE %></td>
                       <td><%= booking.BOOKING_TEL %></td>
                       <td><%= booking.BOOKING_EMAIL %></td>
                       <td><%= booking.BOOKING_PAX %></td>
@@ -205,10 +205,10 @@
                     <% msgList.forEach((msg, index) => { %>
                     <tr>
                       <td><%= index + 1 %></td>
-                      <td><%= msg.NAME %></td>
-                      <td><%= msg.EMAIL %></td>
-                      <td><%= msg.SUBJECT %></td>
-                      <td><%= msg.CONTENT %></td>
+                      <td><%= msg.MESSAGE_NAME %></td>
+                      <td><%= msg.MESSAGE_EMAIL %></td>
+                      <td><%= msg.MESSAGE_SUBJECT %></td>
+                      <td><%= msg.MESSAGE_CONTENT %></td>
                     </tr>
                     <% }); %>
                   </tbody>
