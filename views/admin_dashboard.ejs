@@ -123,7 +123,7 @@
                       <td><%= user.TEL_NO %></td>
                       <td><%= user.EMAIL %></td>
                       <td><%= user.ROLE %></td>
-                      <td><a href="/users/view_user/<%= user.ID_USER %>">View</a></td>
+                      <td><a href="/users/view_user/<%= user.ID_USER %>">View User Details</a></td>
                     </tr>
                     <% }); %>
                   </tbody>
@@ -171,14 +171,14 @@
                       <%} else {%>
                       <td></td>
                       <% } %>
-
-                      <td>
-                        <% if(booking.BOOKING_STATUS === "N") { %>
-                        <button class="btn btn-primary confirm-booking" data-booking-id="<%= booking.ID_BOOKING %>">Confirm</button>
-                        <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Cancel</button>
-                        <% } else { %>
-                        <% } %>
-                      </td>
+                      <td><a href="/bookings/view_booking/<%= booking.ID_BOOKING %>">View Booking Details</a></td>
+                      <!-- <td> -->
+                        <!-- <% if(booking.BOOKING_STATUS === "N") { %> -->
+                        <!-- <button class="btn btn-primary confirm-booking" data-booking-id="<%= booking.ID_BOOKING %>">Confirm</button> -->
+                        <!-- <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Cancel</button> -->
+                        <!-- <% } else { %> -->
+                        <!-- <% } %> -->
+                      <!-- </td> -->
                     </tr>
                     <% }); %>
                   </tbody>

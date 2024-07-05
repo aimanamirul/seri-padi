@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title></title>
+  <title>My Bookings</title>
 
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -98,7 +98,9 @@
               </div>
               <div class="col-lg-8">
                 <label class="mb-2" for="reg_password">Password</label>
-                <input class="form-control" type="password" id="reg_password" name="password"  maxlength="50" required>
+                <input class="form-control" type="password" id="reg_password" name="password" minlength="8" maxlength="50" required>
+                <p class="font-12px"><em>Password must be at least 8 characters with combination of alphanumeric and special characters (!, @, #, $, _)</em></p>
+                <p class="font-12px"><em>Example - S4feP@ssW0rd _</em></p>
               </div>
               <button class="book-a-table-login" type="submit">Register</button>
               <div id="reg-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status">

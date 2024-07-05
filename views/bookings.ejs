@@ -110,7 +110,6 @@
                       <th scope="col">Email</th>
                       <th scope="col">Pax</th>
                       <th scope="col">Status</th>
-                      <th scope="col">Action</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -135,7 +134,7 @@
                       <td>
                         <% if (booking.BOOKING_STATUS === "X") { %>
                         <% } else { %>
-                        <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Cancel</button>
+                        <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Request Cancel</button>
                         <% } %>
                       </td>
                     </tr>
@@ -189,17 +188,20 @@
                 <input type="hidden" class="form-control" id="userName" name="userName" value="<%= user.USERNAME %>" required>
                 <div class="col-lg-8">
                   <label class="mb-2" for="name">Current Password</label>
-                  <input class="form-control" type="password" id="oldPassword" name="oldPassword" required>
+                  <input class="form-control" type="password" id="oldPassword" name="oldPassword" minlength="8" maxlength="50" required>
                 </div>
                 <div class="col-lg-8">
                   <label class="mb-2" for="name">New Password</label>
-                  <input class="form-control" type="password" id="newPassword" name="newPassword" required>
+                  <input class="form-control" type="password" id="newPassword" name="newPassword" minlength="8" maxlength="50" required>
                 </div>
                 <div class="col-lg-8">
                   <label class="mb-2" for="name">Confirm New Password</label>
-                  <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" required>
+                  <input class="form-control" type="password" id="confirmPassword" name="confirmPassword" minlength="8" maxlength="50" required>
                 </div>
-
+                <div class="col-lg-8 mb-3">
+                  <p class="font-12px mt-3"><em>Password must be at least 8 characters with combination of alphanumeric and special characters (!, @, #, $, _)</em></p>
+                  <p class="font-12px"><em>Example - S4feP@ssW0rd _</em></p>
+                </div>
                 <button class="book-a-table-login my-4" type="submit">Save New Password</button>
                 <div id="reset-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" style="display: none;" role="status">
                   <span class="sr-only"></span>
@@ -378,10 +380,12 @@
       }
     });
   </script>
-  <script src="assets/vendor/php-email-form/validate.js"></script>
-  <script src="js/formActions.js" type="module"></script>
-  <script src="js/bookings_page.js"></script>
-  <script src="assets/js/main.js"></script>
+  <script src="/assets/vendor/php-email-form/validate.js"></script>
+  <script src="/assets/vendor/aos/aos.js"></script>
+  <script src="/assets/vendor/glightbox/js/glightbox.min.js"></script>
+  <script src="/js/formActions.js" type="module"></script>
+  <script src="/js/bookings_page.js"></script>
+  <script src="/assets/js/main.js"></script>
 </body>
 
 </html>

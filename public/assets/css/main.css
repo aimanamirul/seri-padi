@@ -1927,3 +1927,11 @@ section,
     color: var(--nav-dropdown-hover-color);
   }
 }
+
+.font-8px {
+  font-size: 8px;
+}
+
+.font-12px {
+  font-size: 12px;
+}

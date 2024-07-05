@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Reset Password</title>
+  <title>Manage Bookings</title>
 
   <link href="https://fonts.googleapis.com" rel="preconnect">
   <link href="https://fonts.gstatic.com" rel="preconnect" crossorigin>
@@ -57,68 +57,87 @@
               <li><a href="#">Dropdown 4</a></li>
             </ul>
           </li> -->
-          <li><a href="/#book-a-table">Book a Table</a></li>
           <li><a href="/#contact">Contact</a></li>
-          <li><a href="/users/bookings_page" class="active">My Bookings</a></li>
+          <li><a href="/users/bookings_page">My Bookings</a></li>
         </ul>
         <i class="mobile-nav-toggle d-xl-none bi bi-list"></i>
       </nav>
 
-      <div>
-        <span class="mx-4">Welcome, Guest!</span>
-        <a class="btn-getstarted" href="/#book-a-table">Login</a>
-      </div>
+      <!-- <a class="btn-getstarted" href="index.html#book-a-table">Book a Table</a> -->
+      <button class="book-a-table-login" id="logoutButton">Logout</button>
 
     </div>
   </header>
-
   <main class="main">
-    <section id="login" class="section">
+    <section id="admin" class="section">
       <div class="container">
+        <div class="row gy-4 mb-4">
+          <div class="col-12 col-lg-12">
+            <h2>Administrator Dashboard</h2>
+            <p>View Booking Details</p>
+            <a href="/users/admin_page">Back to Dashboard</a>
+          </div>
+        </div>
         <div class="row gy-4">
+          <div class="col-12 col-lg-2">
+            <nav class="navmenu">
+              <ul class="nav flex-column align-items-start">
+                <li class="nav-item">
+                  <a class="nav-link active" href="#booking">Booking Details</a>
+                </li>
+              </ul>
+            </nav>
+          </div>
 
-          <div class="col-12 col-lg-8">
-            <% if (Object.keys(user).length === 0) { %>
-            <p><strong>Enter your email address to get verification code.</strong></p>
-            <form id="emailVerifyForm" method="POST">
-              <div class="col-lg-8">
-                <label class="mb-2" for="email">Email</label>
-                <input class="form-control" type="email" id="email" name="email" required>
-              </div>
-              <button class="book-a-table-login" type="submit">Reset Password</button>
-              <div id="reg-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status">
-                <span class="sr-only"></span>
-              </div>
-              <p id="verifyMessage"></p>
-            </form>
-            <% } else { %>
-            <p class="my-4"><strong>Enter new password for user <%= user.NAME %> </strong></p>
-            <form id="resetPasswordForm" method="POST">
-              <input type="hidden" class="form-control" id="userID" name="userID" value="<%= user.ID_USER %>" required>
-              <div class="col-lg-8 mb-3">
-                <label for="newPassword" class="form-label">New Password</label>
-                <input type="password" class="form-control" id="newPassword" name="newPassword" minlength="8" maxlength="50" required>
-              </div>
-              <div class="col-lg-8 mb-3">
-                <label for="confirmPassword" class="form-label">Confirm New Password</label>
-                <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" minlength="8" maxlength="50" required>
-              </div>
-              <div class="col-lg-8 mb-3">
-                <p class="font-12px"><em>Password must be at least 8 characters with combination of alphanumeric and special characters (!, @, #, $, _)</em></p>
-                <p class="font-12px"><em>Example - S4feP@ssW0rd _</em></p>
-              </div>
-              <button class="book-a-table-login" type="submit">Submit</button>
-              <div id="reg-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status">
-                <span class="sr-only"></span>
-              </div>
-              <p id="registerMessage"></p>
-            </form>
-            <% } %>
+          <div class="col-12 col-lg-10">
 
+            <!-- Your dashboard content goes here -->
+            <div id="booking" class="section-content">
+              <!-- Users section content -->
+              <h4 class="mb-4">Viewing Booking Details</h4>
+
+              <div class="row gy-4">
+                <div class="col-12">
+                  <div class="booking-details">
+                    <p><strong>Tracking ID:</strong> <%= viewBooking.ID_BOOKING %></p>
+                    <p><strong>Current Status:
+                        <% if (viewBooking.BOOKING_STATUS === "N") { %>
+                        NEW
+                        <% } else if (viewBooking.BOOKING_STATUS === "X") { %>
+                        CANCELLED
+                        <% } else if (viewBooking.BOOKING_STATUS === "C") { %>
+                        CONFIRMED
+                        <% } else { %>
+                        <% } %>
+                      </strong>
+                    </p>
+                    <p><strong>Name:</strong> <%= viewBooking.BOOKING_NAME %></p>
+                    <p><strong>Date of Booking:</strong> <%= viewBooking.BOOKING_DATE %></p>
+                    <p><strong>Email:</strong> <%= viewBooking.BOOKING_EMAIL %></p>
+                    <p><strong>Tel. No.:</strong> <%= viewBooking.BOOKING_TEL %></p>
+                    <p><strong>Number of Persons:</strong> <%= viewBooking.BOOKING_PAX %> pax</p>
+                    <p><strong>User Remarks:</strong> <%= viewBooking.BOOKING_REMARKS %></p>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-12">
+                <h4 class="my-4">Update Booking Status</h4>
+                <form id="updateBookingForm" method="POST" action="/booking/<%= viewBooking.ID_BOOKING %>">
+                  <div class="mb-3">
+                    <label for="BookingDecision" class="form-label">Confirm or Cancel This booking?</label>
+                  </div>
+                  <button type="submit" class="btn btn-primary">Update Booking</button>
+                </form>
+              </div>
+
+
+            </div>
           </div>
         </div>
       </div>
     </section>
+
   </main>
 
   <footer id="footer" class="footer">
@@ -181,23 +200,47 @@
     </div>
 
   </footer>
-
-  <!-- <script src="js/bookings_page.js"></script> -->
   <script>
     document.addEventListener('DOMContentLoaded', function() {
-      const loginSpinner = document.getElementById('login-spinner');
-      const regSpinner = document.getElementById('reg-spinner');
-      if (loginSpinner) {
-        loginSpinner.style.display = 'none';
+      // Get all the navigation links
+      const navLinks = document.querySelectorAll('.nav-link');
+
+      // Get all the section contents
+      const sectionContents = document.querySelectorAll('.section-content');
+
+      // Function to show only the selected section and hide others
+      function showSection(sectionId) {
+        sectionContents.forEach(content => {
+          if (content.id === sectionId) {
+            content.style.display = 'block';
+          } else {
+            content.style.display = 'none';
+          }
+        });
       }
 
-      if (regSpinner) {
-        regSpinner.style.display = 'none';
-      }
-    })
+      // Add click event listeners to each navigation link
+      navLinks.forEach(link => {
+        link.addEventListener('click', function(event) {
+          event.preventDefault(); // Prevent default link behavior
+
+          // Get the href attribute to determine which section to show
+          const sectionId = this.getAttribute('href').substring(1); // Remove the #
+
+          // Show the corresponding section
+          showSection(sectionId);
+        });
+      });
+
+      // Initially show the first section (optional)
+      showSection('booking');
+    });
+  </script>
+  <script src="/js/bookings_page.js"></script>
+  <script>
+    // const userId = '<%= //viewUser.ID_USER %>';
   </script>
   <script src="/js/formActions.js" type="module"></script>
-
 </body>
 
 </html>

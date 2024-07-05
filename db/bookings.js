@@ -220,4 +220,37 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+async function fetchBookingById(id) {
+  try {
+    // Query the database for bookings associated with the user
+    const result = await database.read(DB_TABLE, DB_TABLE_PK, id);
+    return result; // Return the fetched bookings data
+  } catch (err) {
+    throw new Error(`Failed to fetch bookings: ${err.message}`);
+  }
+}
+
+router.get('/view_booking/:id', async (req, res) => {
+  try {
+    if (!req.session.user) {
+      // If user is not logged in, return a page indicating login is required
+      // const htmlPath = path.resolve(__dirname, 'public', 'require_login.html');
+      // return res.sendFile(htmlPath);
+      return res.redirect('/users/bookings_page');
+    } else {
+      const user = req.session.user
+      console.log(user)
+      const viewBookingId = req.params.id;
+      const viewBooking = await fetchBookingById(viewBookingId); //change here
+      console.log("view booking - " + JSON.stringify(viewBooking))
+      // const bookingsList = await fetchBookingsForEmail(viewUser.EMAIL)
+      // Render the bookings.ejs file with the bookings data
+      res.render('admin_view_booking', { viewBooking });
+    }
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).json({ error: 'Failed to fetch user' });
+  }
+});
+
 export default router;

@@ -129,6 +129,15 @@ if (document.getElementById('registerForm')) {
       return;
     }
 
+    const specialChars = /[!@#_$]/;
+    const alphanumeric = /[a-zA-Z0-9]/;
+
+    if (!specialChars.test(password) || !alphanumeric.test(password)) {
+      registerMessage.textContent = 'Password must contain alphanumeric characters and at least one special character (!@#_$)';
+      registerMessage.style.color = 'red';
+      return;
+    }
+
     try {
       document.getElementById('reg-spinner').style.display = 'inline-block';
       const response = await fetch('/users', {
@@ -172,6 +181,15 @@ if (document.getElementById('resetPasswordForm')) {
     if (newPassword !== confirmPassword) {
       document.getElementById('registerMessage').textContent = 'Confirm password doesn\'t match.';
       document.getElementById('registerMessage').style.color = 'red';
+      return;
+    }
+
+    const specialChars = /[!@#_$]/;
+    const alphanumeric = /[a-zA-Z0-9]/;
+
+    if (!specialChars.test(newPassword) || !alphanumeric.test(newPassword)) {
+      registerMessage.textContent = 'Password must contain alphanumeric characters and at least one special character (!@#_$)';
+      registerMessage.style.color = 'red';
       return;
     }
 
@@ -226,6 +244,16 @@ if (document.getElementById('resetPasswordProfileForm')) {
       document.getElementById('resetMessage').style.color = 'red';
       return;
     }
+
+    const specialChars = /[!@#_$]/;
+    const alphanumeric = /[a-zA-Z0-9]/;
+
+    if (!specialChars.test(newPassword) || !alphanumeric.test(newPassword)) {
+      document.getElementById('resetMessage').textContent = 'Password must contain alphanumeric characters and at least one special character (!@#_$)';
+      document.getElementById('resetMessage').style.color = 'red';
+      return;
+    }
+
 
     if (newPassword !== confirmPassword) {
       document.getElementById('resetMessage').textContent = 'Confirm password doesn\'t match.';
