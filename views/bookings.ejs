@@ -110,6 +110,7 @@
                       <th scope="col">Email</th>
                       <th scope="col">Pax</th>
                       <th scope="col">Status</th>
+                      <th scope="col">Restaurant Remarks</th>
                     </tr>
                   </thead>
                   <tbody>
@@ -131,12 +132,20 @@
                       <% } else { %>
                       <td></td>
                       <% } %>
-                      <td>
-                        <% if (booking.BOOKING_STATUS === "X") { %>
-                        <% } else { %>
-                        <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Request Cancel</button>
-                        <% } %>
+                      <% if (booking.BOOKING_RESPONSE) { %>
+                      <td class="text-center"><%= booking.BOOKING_RESPONSE %></td>
+                      <% } else {%>
+                      <td><em>
+                          No remarks given.
+                        </em>
                       </td>
+                      <% } %>
+                      <!-- <td> -->
+                      <% //if (booking.BOOKING_STATUS === "X") { %>
+                      <% //} else { %>
+                      <!-- <button class="btn btn-danger cancel-booking" data-booking-id="<%= booking.ID_BOOKING %>">Request Cancel</button> -->
+                      <% //} %>
+                      <!-- </td> -->
                     </tr>
                     <% }); %>
                   </tbody>
@@ -221,15 +230,15 @@
               <form id="profileForm" method="POST">
                 <div class="col-lg-8">
                   <label class="mb-2" for="name">Name</label>
-                  <input class="form-control" type="text" id="name" name="name" value="<%= user.NAME %>" required>
+                  <input class="form-control" type="text" id="name" name="name" maxlength="50" value="<%= user.NAME %>" required>
                 </div>
                 <div class="col-lg-8">
                   <label class="mb-2" for="tel_no">Phone Number</label>
-                  <input class="form-control" type="tel" id="tel_no" name="tel_no" value="<%= user.TEL_NO %>" required>
+                  <input class="form-control" type="tel" id="tel_no" name="tel_no" maxlength="20" value="<%= user.TEL_NO %>" required>
                 </div>
                 <div class="col-lg-8">
                   <label class="mb-2" for="email">Email</label>
-                  <input class="form-control" type="email" id="email" name="email" value="<%= user.EMAIL %>" required>
+                  <input class="form-control" type="email" id="email" name="email" maxlength="30" value="<%= user.EMAIL %>" required>
                 </div>
                 <button class="book-a-table-login my-4" type="submit">Save</button>
                 <div id="profile-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status" style="display:none;">
