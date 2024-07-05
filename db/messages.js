@@ -3,11 +3,13 @@ import dotenv from 'dotenv';
 import { config } from './config.js';
 import Database from './database.js';
 import { sendEmail } from '../util/emailer.js';
+import EmailActions from '../actions/EmailActions.js';
 
 const router = express.Router();
 router.use(express.json());
 
 dotenv.config();
+const emailActions = new EmailActions();
 
 // Create database object
 const database = new Database(config);
@@ -22,19 +24,8 @@ router.post('/create', async (req, res) => {
         const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
         if (rowsAffected) {
             res.status(201).json({ rowsAffected });
-
-            const email = process.env.EMAIL_ADDRESS;
-
-            const subject = 'Message Received';
-            const text = ``;
-            const html = `<p>Dear Admin,</p>
-            <p>A messsage has been received.</p>
-            <p><strong>Message Subject:</strong> ${data.MESSAGE_SUBJECT}
-            <p><strong>Message Content:</strong> ${data.MESSAGE_CONTENT} 
-            <p><strong>Seri Padi De Cabin Management</strong></p>
-            `;
-
-            await sendEmail(email, subject, text, html);
+            await emailActions.emailerSend("newMessageSent", data)
+            // await sendEmail(email, subject, text, html);
 
         } else {
             res.status(500).json({ error: 'Failed to create booking.' });

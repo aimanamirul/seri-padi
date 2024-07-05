@@ -2,9 +2,12 @@ import express from 'express';
 import { config } from './config.js';
 import Database from './database.js';
 import { sendEmail } from '../util/emailer.js';
+import EmailActions from '../actions/EmailActions.js'
 
 const router = express.Router();
 router.use(express.json());
+
+const emailActions = new EmailActions();
 
 // Create database object
 const database = new Database(config);
@@ -40,7 +43,8 @@ router.post('/create', async (req, res) => {
     const rowsAffected = await database.create(DB_TABLE, DB_TABLE_PK, data);
     if (rowsAffected) {
 
-      emailerAction("bookingSent", data);
+      await emailActions.emailerSend("newBookingSent", data);
+      // emailerAction("bookingSent", data);
 
       // const dateObj = new Date(data.BOOKING_DATE);
       // const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
@@ -203,6 +207,37 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+router.put('/update/:id', async (req, res) => {
+  console.log('connect')
+  try {
+    const tableId = req.params.id;
+    const table = req.body;
+
+    console.log(tableId)
+    console.log(table)
+
+    if (tableId && table) {
+      delete table.id;
+      const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, table);
+
+      const booking = await database.read(DB_TABLE, DB_TABLE_PK, tableId);
+
+      if (booking.BOOKING_STATUS === 'X') {
+        await emailActions.emailerSend("bookingCancelled", booking);
+      } else if (booking.BOOKING_STATUS === 'C') {
+        await emailActions.emailerSend("bookingConfirmed", booking);
+      }
+
+      res.status(200).json({ rowsAffected });
+    } else {
+      res.status(404).json({ error: 'Booking ID and data are required' });
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: err?.message });
+  }
+});
+
 router.delete('/:id', async (req, res) => {
   try {
     // Delete the table with the specified ID
@@ -243,6 +278,12 @@ router.get('/view_booking/:id', async (req, res) => {
       const viewBookingId = req.params.id;
       const viewBooking = await fetchBookingById(viewBookingId); //change here
       console.log("view booking - " + JSON.stringify(viewBooking))
+
+      const dateObj = new Date(viewBooking.BOOKING_DATE);
+      const formattedDate = `${dateObj.getUTCFullYear()}-${padZero(dateObj.getUTCMonth() + 1)}-${padZero(dateObj.getUTCDate())}`;
+      const formattedTime = `${padZero(dateObj.getUTCHours())}:${padZero(dateObj.getUTCMinutes())}:${padZero(dateObj.getUTCSeconds())}`;
+      viewBooking.BOOKING_DATE = `${formattedDate} ${formattedTime}`;
+
       // const bookingsList = await fetchBookingsForEmail(viewUser.EMAIL)
       // Render the bookings.ejs file with the bookings data
       res.render('admin_view_booking', { viewBooking });

@@ -122,16 +122,27 @@
               </div>
 
               <div class="col-12">
+                <% if (viewBooking.BOOKING_STATUS === 'N') { %>
                 <h4 class="my-4">Update Booking Status</h4>
-                <form id="updateBookingForm" method="POST" action="/booking/<%= viewBooking.ID_BOOKING %>">
+                <form id="updateBookingForm" method="POST">
+                  <input type="hidden" id="bookingId" name="bookingId" value="<%=viewBooking.ID_BOOKING %>" checked>
                   <div class="mb-3">
                     <label for="BookingDecision" class="form-label">Confirm or Cancel This booking?</label>
                   </div>
-                  <button type="submit" class="btn btn-primary">Update Booking</button>
+                  <input type="radio" id="confirm" name="bookingStatus" value="C" checked>
+                  <label for="confirm">Confirm</label><br>
+                  <input type="radio" id="cancel" name="bookingStatus" value="X">
+                  <label for="cancel">Cancel</label><br><br>
+                  <label for="response">Response Remarks:</label><br>
+                  <textarea id="bookingResponse" name="bookingResponse" rows="4" cols="50"></textarea><br><br>
+                  <button type="submit" class="book-a-table-login">Update Booking</button>
+                  <div id="update-booking-spinner" class="spinner-grow spinner-grow-sm text-danger mx-3" role="status" style="display:none;">
+                    <span class="sr-only"></span>
+                  </div>
+                  <p id="update_message"></p>
                 </form>
+                <% } %>
               </div>
-
-
             </div>
           </div>
         </div>

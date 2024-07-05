@@ -86,7 +86,7 @@ if (document.getElementById('guestBookForm')) {
 
         if (response.ok) {
           document.getElementById('booking_loading').classList.remove('d-block');
-          document.getElementById('guestBookForm').reset(); // Clear the form
+          // document.getElementById('guestBookForm').reset(); // Clear the form
           document.getElementById('booking_err').style.display = 'none'; // Hide error message if any
           document.getElementById('booking_sent').style.display = 'block'; // Show success message
           document.getElementById('booking_sent').textContent = `Your booking request was sent. Booking ID: ${ID_BOOKING}. We will call back or send an Email to confirm your reservation. Thank you!`;
@@ -477,6 +477,48 @@ if (document.getElementById('contactForm')) {
         document.getElementById('msg_error').style.display = 'block'; // Show error message
         document.getElementById('msg_sent').style.display = 'none'; // Hide success message
       }
+    }
+  });
+}
+
+if (document.getElementById('updateBookingForm')) {
+  document.getElementById('updateBookingForm').addEventListener('submit', async function (event) {
+    event.preventDefault();
+
+    const ID_BOOKING = document.getElementById('bookingId').value; // Ensure this matches your hidden input's ID
+    const BOOKING_STATUS = document.querySelector('input[name="bookingStatus"]:checked').value;
+    const BOOKING_RESPONSE = document.getElementById('bookingResponse').value;
+
+    const confirmMsg = BOOKING_STATUS === 'X' ? 'Are you sure you want to cancel this booking?' : 'Are you sure you want to confirm this booking?';
+    const rtnAct = BOOKING_STATUS === 'X' ? 'Cancellation' : 'Confirmation';
+
+    if (confirm(confirmMsg)) {
+      try {
+        document.getElementById('update-booking-spinner').style.display = 'inline-block';
+        const response = await fetch(`/bookings/update/${ID_BOOKING}`, {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({ BOOKING_STATUS, BOOKING_RESPONSE })
+        });
+
+        const result = await response.json();
+
+        if (response.ok) {
+          document.getElementById('update_message').textContent = `Booking ${rtnAct} successful.`;
+          document.getElementById('update-booking-spinner').style.display = 'none';
+          window.location.reload(); // Reload the page on success (optional)
+        } else {
+          document.getElementById('update_message').textContent = `Booking ${rtnAct} failed.`;
+          document.getElementById('update-booking-spinner').style.display = 'none';
+        }
+      } catch (error) {
+        console.error('Error updating booking:', error);
+        alert('Failed to update booking.');
+      }
+    } else {
+      return;
     }
   });
 }
