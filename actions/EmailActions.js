@@ -29,7 +29,7 @@ class EmailActions {
                     text = `Dear ${data.BOOKING_NAME}, we have received your booking for ${readableDate}.`;
                     html = `
                     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                        <h2 style="color: #ce1212;">Booking Confirmation</h2>
+                        <h2 style="color: #00700f;">Booking Submitted</h2>
                         <p style="font-size: 16px;">Dear ${data.BOOKING_NAME},</p>
                         <p style="font-size: 16px;">We have received your booking for ${readableDate}.</p>
                         <div style="background-color: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
@@ -48,7 +48,7 @@ class EmailActions {
                     const adminText = `A new booking has been received from ${data.BOOKING_NAME} for ${readableDate}.`;
                     const adminHtml = `
                     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                        <h2 style="color: #ce1212;">New Booking Notification</h2>
+                        <h2 style="color: #00700f;">New Booking Notification</h2>
                         <p style="font-size: 16px;">A new booking has been received from ${data.BOOKING_NAME}.</p>
                         <div style="background-color: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
                             <h3 style="color: #333; margin-top: 0;">Booking Details:</h3>
@@ -72,7 +72,7 @@ class EmailActions {
                     text = ``;
                     html = `
                     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                        <h2 style="color: #ce1212;">Dear Admin,</h2>
+                        <h2 style="color: #f9f9f9;">Dear Admin,</h2>
                         <p style="font-size: 16px;">You have received a new message from the contact form on Seri Padi De Cabin's website.</p>
                         <div style="background-color: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
                             <h3 style="color: #333; margin-top: 0;">Message Details:</h3>
@@ -113,7 +113,7 @@ class EmailActions {
                     subject = 'Booking Confirmed - Seri Padi De Cabin';
                     html = `
                         <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                            <h2 style="color: #ce1212;">Booking Confirmed</h2>
+                            <h2 style="color: ##00700f;">Booking Confirmed</h2>
                             <p style="font-size: 16px;">Dear ${data.BOOKING_NAME},</p>
                             <p style="font-size: 16px;">We are pleased to confirm your booking scheduled for ${readableDate}.</p>
                             <p style="font-size: 14px; margin-top: 20px;">Thank you for choosing Seri Padi De Cabin. We look forward to welcoming you!</p>
