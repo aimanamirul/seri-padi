@@ -1058,7 +1058,7 @@
                     <input type="date" name="date" class="form-control" id="date" placeholder="Date" required="">
                   </div>
                   <div class="col-lg-4 col-md-6">
-                    <input type="time" class="form-control" name="time" id="time" placeholder="Time" required="">
+                    <input type="time" class="form-control" name="time" id="time" placeholder="Time" min="18:00" max="23:59" required="">
                   </div>
                   <div class="col-lg-4 col-md-6">
                     <input type="number" class="form-control" name="people" id="people" placeholder="# of people" required="">
@@ -1282,7 +1282,7 @@
       </div>
 
     </section><!-- /Contact Section -->
-    
+
   </main>
 
   <footer id="footer" class="footer">
@@ -1377,6 +1377,17 @@
           }
         });
       }
+
+      const today = new Date();
+
+      // Format today's date as YYYY-MM-DD
+      const yyyy = today.getFullYear();
+      const mm = String(today.getMonth() + 1).padStart(2, '0');
+      const dd = String(today.getDate()).padStart(2, '0');
+      const formattedToday = `${yyyy}-${mm}-${dd}`;
+
+      // Set the min attribute of the date input
+      document.getElementById('date').setAttribute('min', formattedToday);
 
       navLinks.forEach(link => {
         link.addEventListener('click', function(event) {

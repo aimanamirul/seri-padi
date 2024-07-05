@@ -118,6 +118,32 @@ router.put('/:id', async (req, res) => {
   }
 });
 
+router.put('/update/:id', async (req, res) => {
+  console.log('connect')
+  try {
+    const tableId = req.params.id;
+    const table = req.body;
+
+    console.log(tableId)
+    console.log(table)
+
+    if (tableId && table) {
+      delete table.id;
+      const rowsAffected = await database.update(DB_TABLE, DB_TABLE_PK, tableId, table);
+
+      const user = await database.read(DB_TABLE, DB_TABLE_PK, tableId);
+      req.session.user = user;
+
+      res.status(200).json({ rowsAffected });
+    } else {
+      res.status(404).json({ error: 'User ID and data are required' });
+    }
+  } catch (err) {
+    console.log(err)
+    res.status(500).json({ error: err?.message });
+  }
+});
+
 router.delete('/:id', async (req, res) => {
   try {
     const tableId = req.params.id;

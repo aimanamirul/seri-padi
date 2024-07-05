@@ -399,7 +399,8 @@ if (document.getElementById('profileForm')) {
 
     try {
       // const userId = 'your-user-id'; // Replace with actual user ID logic
-      const response = await fetch(`/users/${userId}`, {
+      document.getElementById('profile-spinner').style.display = 'inline-block';
+      const response = await fetch(`/users/update/${userId}`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json'
@@ -409,7 +410,17 @@ if (document.getElementById('profileForm')) {
 
       if (response.ok) {
         alert('Profile updated successfully!');
-        window.location.reload(); // Reload the page on success (optional)
+        document.getElementById('profile-spinner').style.display = 'none';
+
+        for (const key in formDataObject) {
+          const element = document.getElementById(`${key}`);
+          if (element) {
+            console.log(element.textContent + " -- " + formDataObject[key]);
+            element.textContent = formDataObject[key];
+          }
+        }
+
+        window.location.reload(true); // Reload the page on success (optional)
       } else {
         alert('Failed to update user profile.');
       }
