@@ -72,7 +72,7 @@ class EmailActions {
                     text = ``;
                     html = `
                     <div style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
-                        <h2 style="color: #f9f9f9;">Dear Admin,</h2>
+                        <h2 style="color: #303030;">Dear Admin,</h2>
                         <p style="font-size: 16px;">You have received a new message from the contact form on Seri Padi De Cabin's website.</p>
                         <div style="background-color: #f9f9f9; padding: 15px; border: 1px solid #ddd; border-radius: 5px;">
                             <h3 style="color: #333; margin-top: 0;">Message Details:</h3>
